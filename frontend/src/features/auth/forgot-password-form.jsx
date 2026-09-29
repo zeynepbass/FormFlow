@@ -30,11 +30,11 @@ export function ForgotPasswordForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
       <FormStatus {...status} />
-      <Field id="email" label="Email" error={errors.email?.message}>
+      <Field id="email" label="E-posta" error={errors.email?.message}>
         {(props) => <Input type="email" autoComplete="email" {...props} {...register('email')} />}
       </Field>
-      <SubmitButton pending={isSubmitting} pendingText="Sending…" className="w-full">
-        Send reset link
+      <SubmitButton pending={isSubmitting} pendingText="Gönderiliyor…" className="w-full">
+        Sıfırlama bağlantısı gönder
       </SubmitButton>
     </form>
   );

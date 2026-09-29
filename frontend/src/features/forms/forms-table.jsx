@@ -11,7 +11,7 @@ export function FormsTable({ forms }) {
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <Link
-                href={`/forms/${form.id}`}
+                href={`/formlar/${form.id}`}
                 className="truncate font-medium hover:text-primary-dark hover:underline"
               >
                 {form.title}
@@ -19,14 +19,13 @@ export function FormsTable({ forms }) {
               <StatusBadge status={form.status} />
             </div>
             <p className="mt-1 text-sm text-muted-strong">
-              <Link href={`/forms/${form.id}/responses`} className="hover:underline">
-                {formatNumber(form.responseCount)}{' '}
-                {form.responseCount === 1 ? 'response' : 'responses'}
+              <Link href={`/formlar/${form.id}/yanitlar`} className="hover:underline">
+                {formatNumber(form.responseCount)} yanıt
               </Link>
               <span aria-hidden="true"> · </span>
-              {form.fieldCount} {form.fieldCount === 1 ? 'field' : 'fields'}
+              {form.fieldCount} alan
               <span aria-hidden="true"> · </span>
-              Updated {formatDate(form.updatedAt)}
+              Güncellendi: {formatDate(form.updatedAt)}
             </p>
           </div>
           <FormActionsMenu form={form} />

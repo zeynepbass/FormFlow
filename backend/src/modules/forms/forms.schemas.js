@@ -13,7 +13,7 @@ import {
 const optionSchema = z
   .object({
     id: z.string().regex(OPTION_ID_PATTERN),
-    label: z.string().trim().min(1, 'Options need a label.').max(200),
+    label: z.string().trim().min(1, 'Seçeneklerin bir metni olmalı.').max(200),
   })
   .strict();
 
@@ -25,14 +25,14 @@ const validationSchema = z
   })
   .strict()
   .refine((value) => value.min === undefined || value.max === undefined || value.min <= value.max, {
-    message: 'Minimum must be less than or equal to maximum.',
+    message: 'En küçük değer en büyük değerden büyük olamaz.',
   });
 
 export const fieldSchema = z
   .object({
     id: z.string().regex(FIELD_ID_PATTERN),
     type: z.enum(FIELD_TYPES),
-    label: z.string().trim().min(1, 'Every field needs a label.').max(200),
+    label: z.string().trim().min(1, 'Her alanın bir başlığı olmalı.').max(200),
     description: z.string().trim().max(500).default(''),
     placeholder: z.string().trim().max(150).default(''),
     required: z.boolean().default(false),
@@ -44,18 +44,26 @@ export const fieldSchema = z
 
 const fieldsSchema = z
   .array(fieldSchema)
-  .max(FORM_LIMITS.fields, `A form can have at most ${FORM_LIMITS.fields} fields.`)
+  .max(FORM_LIMITS.fields, `Bir formda en fazla ${FORM_LIMITS.fields} alan olabilir.`)
   .superRefine((fields, ctx) => {
     const ids = new Set();
     fields.forEach((field, index) => {
       if (ids.has(field.id)) {
-        ctx.addIssue({ code: 'custom', path: [index, 'id'], message: 'Duplicate field id.' });
+        ctx.addIssue({
+          code: 'custom',
+          path: [index, 'id'],
+          message: 'Aynı alan kimliği birden fazla kullanılmış.',
+        });
       }
       ids.add(field.id);
 
       const optionIds = new Set(field.options.map((option) => option.id));
       if (optionIds.size !== field.options.length) {
-        ctx.addIssue({ code: 'custom', path: [index, 'options'], message: 'Duplicate option id.' });
+        ctx.addIssue({
+          code: 'custom',
+          path: [index, 'options'],
+          message: 'Aynı seçenek kimliği birden fazla kullanılmış.',
+        });
       }
     });
 
@@ -63,22 +71,22 @@ const fieldsSchema = z
     if (fileFields > FORM_LIMITS.fileFields) {
       ctx.addIssue({
         code: 'custom',
-        message: `A form can have at most ${FORM_LIMITS.fileFields} file upload fields.`,
+        message: `Bir formda en fazla ${FORM_LIMITS.fileFields} dosya yükleme alanı olabilir.`,
       });
     }
   });
 
-const title = z.string().trim().min(1, 'Give your form a title.').max(120);
+const title = z.string().trim().min(1, 'Formuna bir başlık ver.').max(120);
 const description = z.string().trim().max(1000);
 
 export const slugSchema = z
   .string()
   .trim()
   .toLowerCase()
-  .min(3, 'Use at least 3 characters.')
-  .max(60, 'Use at most 60 characters.')
-  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Use lowercase letters, numbers and single dashes.')
-  .refine((value) => !RESERVED_SLUGS.has(value), 'This address is reserved.');
+  .min(3, 'En az 3 karakter kullan.')
+  .max(60, 'En fazla 60 karakter kullan.')
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Küçük harf, rakam ve tek tire kullan.')
+  .refine((value) => !RESERVED_SLUGS.has(value), 'Bu adres kullanılamaz.');
 
 const settingsSchema = z
   .object({
@@ -106,7 +114,7 @@ export const listFormsQuerySchema = z.object({
 });
 
 export const DEFAULT_SETTINGS = {
-  submitLabel: 'Submit',
-  successMessage: 'Thanks! Your response has been recorded.',
+  submitLabel: 'Gönder',
+  successMessage: 'Teşekkürler! Yanıtın kaydedildi.',
   allowIndexing: false,
 };

@@ -17,8 +17,8 @@ export async function updateProfile(userId, { name }) {
 async function assertPassword(userId, password) {
   const user = await users().findOne({ _id: userId }, { projection: { passwordHash: 1 } });
   if (!user || !(await verifyPassword(user.passwordHash, password))) {
-    throw badRequest('Your current password is incorrect.', [
-      { path: 'currentPassword', message: 'Your current password is incorrect.' },
+    throw badRequest('Mevcut şifren hatalı.', [
+      { path: 'currentPassword', message: 'Mevcut şifren hatalı.' },
     ]);
   }
 }

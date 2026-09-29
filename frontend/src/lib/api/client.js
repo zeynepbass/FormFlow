@@ -16,7 +16,7 @@ export async function api(path, { method = 'GET', body, signal } = {}) {
     if (error.name === 'AbortError') throw error;
     throw new ApiError(0, {
       code: 'NETWORK_ERROR',
-      message: 'Could not reach the server. Check your connection and try again.',
+      message: 'Sunucuya ulaşılamadı. Bağlantını kontrol edip tekrar dene.',
     });
   }
 

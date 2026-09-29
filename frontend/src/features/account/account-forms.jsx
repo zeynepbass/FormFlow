@@ -16,11 +16,11 @@ import { newPassword, passwordsMatch } from '@/features/auth/schemas';
 import { api, applyFieldErrors } from '@/lib/api/client';
 import { requiredText } from '@/lib/validation';
 
-const profileSchema = z.object({ name: requiredText('Enter your name.', 80) });
+const profileSchema = z.object({ name: requiredText('Adını gir.', 80) });
 
 const passwordSchema = z
   .object({
-    currentPassword: z.string().check(z.minLength(1, 'Enter your current password.')),
+    currentPassword: z.string().check(z.minLength(1, 'Mevcut şifreni gir.')),
     newPassword,
     confirmPassword: z.string(),
   })
@@ -52,7 +52,7 @@ export function ProfileForm({ user }) {
     try {
       const { data } = await api('/users/me', { method: 'PATCH', body: values });
       reset({ name: data.name });
-      setStatus({ error: '', success: 'Profile updated.' });
+      setStatus({ error: '', success: 'Profil güncellendi.' });
       router.refresh();
     } catch (error) {
       setStatus({ error: error.message, success: '' });
@@ -60,21 +60,21 @@ export function ProfileForm({ user }) {
   }
 
   return (
-    <Section id="profile-heading" title="Profile">
+    <Section id="profile-heading" title="Profil">
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         <FormStatus {...status} />
-        <Field id="name" label="Name" error={errors.name?.message}>
+        <Field id="name" label="Ad soyad" error={errors.name?.message}>
           {(props) => <Input autoComplete="name" {...props} {...register('name')} />}
         </Field>
-        <Field id="email" label="Email" description="Your email address cannot be changed yet.">
+        <Field id="email" label="E-posta" description="E-posta adresi şimdilik değiştirilemiyor.">
           {(props) => <Input type="email" value={user.email} readOnly {...props} />}
         </Field>
         <SubmitButton
           pending={isSubmitting}
           disabled={!isDirty || isSubmitting}
-          pendingText="Saving…"
+          pendingText="Kaydediliyor…"
         >
-          Save profile
+          Profili kaydet
         </SubmitButton>
       </form>
     </Section>
@@ -102,7 +102,10 @@ export function PasswordForm() {
         body: { currentPassword, newPassword: password },
       });
       reset();
-      setStatus({ error: '', success: 'Password changed. Other devices have been signed out.' });
+      setStatus({
+        error: '',
+        success: 'Şifre değiştirildi. Diğer cihazlardaki oturumlar kapatıldı.',
+      });
     } catch (error) {
       if (!applyFieldErrors(error, setError, ['currentPassword', 'newPassword'])) {
         setStatus({ error: error.message, success: '' });
@@ -113,16 +116,12 @@ export function PasswordForm() {
   return (
     <Section
       id="password-heading"
-      title="Password"
-      description="Changing it signs you out on other devices."
+      title="Şifre"
+      description="Şifreni değiştirince diğer cihazlardaki oturumların kapanır."
     >
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         <FormStatus {...status} />
-        <Field
-          id="currentPassword"
-          label="Current password"
-          error={errors.currentPassword?.message}
-        >
+        <Field id="currentPassword" label="Mevcut şifre" error={errors.currentPassword?.message}>
           {(props) => (
             <Input
               type="password"
@@ -132,7 +131,7 @@ export function PasswordForm() {
             />
           )}
         </Field>
-        <Field id="newPassword" label="New password" error={errors.newPassword?.message}>
+        <Field id="newPassword" label="Yeni şifre" error={errors.newPassword?.message}>
           {(props) => (
             <Input
               type="password"
@@ -144,7 +143,7 @@ export function PasswordForm() {
         </Field>
         <Field
           id="confirmPassword"
-          label="Confirm new password"
+          label="Yeni şifre (tekrar)"
           error={errors.confirmPassword?.message}
         >
           {(props) => (
@@ -156,8 +155,8 @@ export function PasswordForm() {
             />
           )}
         </Field>
-        <SubmitButton pending={isSubmitting} pendingText="Updating…">
-          Change password
+        <SubmitButton pending={isSubmitting} pendingText="Güncelleniyor…">
+          Şifreyi değiştir
         </SubmitButton>
       </form>
     </Section>
@@ -188,8 +187,8 @@ export function DeleteAccount() {
   return (
     <Section
       id="delete-heading"
-      title="Delete account"
-      description="Permanently delete your account, all forms, responses and uploaded files."
+      title="Hesabı sil"
+      description="Hesabını, tüm formlarını, yanıtları ve yüklenen dosyaları kalıcı olarak sil."
     >
       <form
         className="space-y-5"
@@ -199,7 +198,7 @@ export function DeleteAccount() {
         }}
       >
         <FormStatus error={error} />
-        <Field id="delete-password" label="Confirm with your password">
+        <Field id="delete-password" label="Şifrenle onayla">
           {(props) => (
             <Input
               type="password"
@@ -211,15 +210,15 @@ export function DeleteAccount() {
           )}
         </Field>
         <Button type="submit" variant="danger" disabled={!password || pending}>
-          Delete my account
+          Hesabımı sil
         </Button>
       </form>
       <ConfirmDialog
         open={open}
         onOpenChange={setOpen}
-        title="Delete your account?"
-        description="This removes everything and cannot be undone."
-        confirmLabel="Delete account"
+        title="Hesabın silinsin mi?"
+        description="Her şey silinecek ve bu işlem geri alınamaz."
+        confirmLabel="Hesabı sil"
         pending={pending}
         onConfirm={remove}
       />

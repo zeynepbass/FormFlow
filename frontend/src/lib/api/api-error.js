@@ -1,7 +1,7 @@
 export class ApiError extends Error {
   constructor(
     status,
-    { code = 'INTERNAL_ERROR', message = 'Something went wrong.', details } = {},
+    { code = 'INTERNAL_ERROR', message = 'Bir şeyler ters gitti.', details } = {},
   ) {
     super(message);
     this.status = status;

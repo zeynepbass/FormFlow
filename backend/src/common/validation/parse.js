@@ -1,4 +1,7 @@
+import { z } from 'zod';
 import { badRequest } from '../errors/app-error.js';
+
+z.config(z.locales.tr());
 
 export function parse(schema, value) {
   const result = schema.safeParse(value);
@@ -7,7 +10,7 @@ export function parse(schema, value) {
       path: issue.path.join('.'),
       message: issue.message,
     }));
-    throw badRequest('Some fields are invalid.', details);
+    throw badRequest('Bazı alanlar geçersiz.', details);
   }
   return result.data;
 }

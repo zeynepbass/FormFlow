@@ -11,14 +11,14 @@ async function expectNoViolations(page) {
   ).toEqual([]);
 }
 
-for (const path of ['/', '/features', '/about', '/login', '/register', '/forgot-password']) {
-  test(`${path} has no detectable WCAG violations`, async ({ page }) => {
+for (const path of ['/', '/ozellikler', '/hakkinda', '/giris', '/kayit', '/sifremi-unuttum']) {
+  test(`${path} sayfasında WCAG ihlali yok`, async ({ page }) => {
     await page.goto(path);
     await expectNoViolations(page);
   });
 }
 
-test.describe('public form', () => {
+test.describe('yayınlanan form', () => {
   let slug;
 
   test.beforeAll(async ({ playwright, baseURL }) => {
@@ -29,34 +29,34 @@ test.describe('public form', () => {
     await request.dispose();
   });
 
-  test('has no detectable WCAG violations, including error state', async ({ page }) => {
+  test('hata durumu dahil WCAG ihlali yok', async ({ page }) => {
     await page.goto(`/f/${slug}`);
     await expectNoViolations(page);
 
-    await page.getByRole('button', { name: 'Submit' }).click();
-    await expect(page.getByText('This field is required.').first()).toBeVisible();
+    await page.getByRole('button', { name: 'Gönder' }).click();
+    await expect(page.getByText('Bu alan zorunludur.').first()).toBeVisible();
     await expectNoViolations(page);
   });
 
-  test('can be completed with the keyboard on a small screen', async ({ page }) => {
+  test('küçük ekranda klavyeyle doldurulabilir', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 740 });
     await page.goto(`/f/${slug}`);
     await page.waitForLoadState('networkidle');
 
-    await page.getByLabel('Full name').focus();
+    await page.getByLabel('Ad soyad').focus();
     await page.keyboard.type('Keyboard User');
     await page.keyboard.press('Tab');
     await page.keyboard.type('keys@example.com');
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
     await page.keyboard.press('Space');
-    await expect(page.getByLabel('Forms')).toBeChecked();
+    await expect(page.getByLabel('Formlar')).toBeChecked();
 
-    await page.getByRole('button', { name: 'Submit' }).press('Enter');
-    await expect(page.getByRole('heading', { name: 'Response sent' })).toBeFocused();
+    await page.getByRole('button', { name: 'Gönder' }).press('Enter');
+    await expect(page.getByRole('heading', { name: 'Yanıtın gönderildi' })).toBeFocused();
   });
 
-  test('is served with noindex by default', async ({ page }) => {
+  test('varsayılan olarak noindex ile sunulur', async ({ page }) => {
     await page.goto(`/f/${slug}`);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
   });

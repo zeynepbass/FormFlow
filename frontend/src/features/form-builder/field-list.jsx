@@ -18,7 +18,7 @@ import { FieldCard } from './field-card';
 
 const screenReaderInstructions = {
   draggable:
-    'To reorder, press space or enter on the handle, use the up and down arrow keys to move the field, then press space or enter to drop it. Press escape to cancel.',
+    'Sıralamak için tutamakta boşluk ya da enter tuşuna bas, alanı yukarı ve aşağı ok tuşlarıyla taşı, bırakmak için tekrar boşluk ya da enter tuşuna bas. İptal etmek için escape tuşuna bas.',
 };
 
 export function FieldList({ fields, selectedId, problemIds, dispatch, onMove }) {
@@ -29,22 +29,22 @@ export function FieldList({ fields, selectedId, problemIds, dispatch, onMove }) 
 
   const labelOf = (id) => {
     const index = fields.findIndex((field) => field.id === id);
-    return fields[index]?.label.trim() || `Field ${index + 1}`;
+    return fields[index]?.label.trim() || `Alan ${index + 1}`;
   };
   const positionOf = (id) => fields.findIndex((field) => field.id === id) + 1;
 
   const announcements = {
     onDragStart: ({ active }) =>
-      `Picked up ${labelOf(active.id)}. It is at position ${positionOf(active.id)} of ${fields.length}.`,
+      `${labelOf(active.id)} seçildi. ${fields.length} alan içinde ${positionOf(active.id)}. sırada.`,
     onDragOver: ({ active, over }) =>
       over
-        ? `${labelOf(active.id)} moved to position ${positionOf(over.id)} of ${fields.length}.`
-        : `${labelOf(active.id)} is no longer over the list.`,
+        ? `${labelOf(active.id)}, ${fields.length} alan içinde ${positionOf(over.id)}. sıraya taşındı.`
+        : `${labelOf(active.id)} artık listenin üzerinde değil.`,
     onDragEnd: ({ active, over }) =>
       over
-        ? `${labelOf(active.id)} dropped at position ${positionOf(over.id)} of ${fields.length}.`
-        : `${labelOf(active.id)} dropped.`,
-    onDragCancel: ({ active }) => `Reordering cancelled. ${labelOf(active.id)} was not moved.`,
+        ? `${labelOf(active.id)}, ${fields.length} alan içinde ${positionOf(over.id)}. sıraya bırakıldı.`
+        : `${labelOf(active.id)} bırakıldı.`,
+    onDragCancel: ({ active }) => `Sıralama iptal edildi. ${labelOf(active.id)} taşınmadı.`,
   };
 
   function handleDragEnd({ active, over }) {
@@ -66,7 +66,7 @@ export function FieldList({ fields, selectedId, problemIds, dispatch, onMove }) 
         items={fields.map((field) => field.id)}
         strategy={verticalListSortingStrategy}
       >
-        <ol className="space-y-3" aria-label="Form fields">
+        <ol className="space-y-3" aria-label="Form alanları">
           {fields.map((field, index) => (
             <FieldCard
               key={field.id}

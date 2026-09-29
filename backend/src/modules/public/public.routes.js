@@ -43,14 +43,14 @@ function toPublicFormDto(form) {
 async function findPublicForm(slug, statuses = ['published', 'paused']) {
   if (typeof slug !== 'string' || slug.length > 60 || !SLUG_PATTERN.test(slug)) throw notFound();
   const form = await collection('forms').findOne({ slug, status: { $in: statuses } });
-  if (!form) throw notFound('Form not found.');
+  if (!form) throw notFound('Form bulunamadı.');
   return form;
 }
 
 async function findOpenForm(slug) {
   const form = await findPublicForm(slug);
   if (form.status !== 'published') {
-    throw new AppError(409, 'FORM_CLOSED', 'This form is not accepting responses right now.');
+    throw new AppError(409, 'FORM_CLOSED', 'Bu form şu anda yanıt kabul etmiyor.');
   }
   return form;
 }
@@ -60,7 +60,7 @@ function readSubmission(req) {
   try {
     return JSON.parse(req.body?.payload ?? '');
   } catch {
-    throw badRequest('The submission is not valid.');
+    throw badRequest('Gönderim geçersiz.');
   }
 }
 

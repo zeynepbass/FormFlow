@@ -8,16 +8,16 @@ export default function Error({ reset }) {
       id="main"
       className="flex min-h-[60dvh] flex-col items-center justify-center px-4 text-center"
     >
-      <h1 className="text-2xl font-semibold tracking-tight">Something went wrong</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Bir şeyler ters gitti</h1>
       <p className="mt-3 max-w-md text-muted-strong">
-        An unexpected error stopped this page from loading. Please try again.
+        Beklenmeyen bir hata nedeniyle sayfa yüklenemedi. Lütfen tekrar dene.
       </p>
       <button
         type="button"
         className={buttonVariants({ className: 'mt-8' })}
         onClick={() => reset()}
       >
-        Try again
+        Tekrar dene
       </button>
     </main>
   );

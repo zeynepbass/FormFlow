@@ -22,8 +22,8 @@ export default function AppLayout({ children }) {
     <div className="min-h-dvh lg:grid lg:grid-cols-[15rem_1fr]">
       <aside className="hidden border-r border-border bg-surface px-4 py-5 lg:block">
         <div className="sticky top-5">
-          <Logo href="/dashboard" className="px-2" />
-          <nav aria-label="Workspace" className="mt-8">
+          <Logo href="/panel" className="px-2" />
+          <nav aria-label="Çalışma alanı" className="mt-8">
             <Suspense fallback={<NavList />}>
               <AppNavLinks />
             </Suspense>
@@ -35,7 +35,7 @@ export default function AppLayout({ children }) {
         <header className="flex h-16 items-center justify-between gap-4 border-b border-border bg-surface px-4 sm:px-6 lg:justify-end">
           <div className="flex items-center gap-2 lg:hidden">
             <MobileNav />
-            <Logo href="/dashboard" />
+            <Logo href="/panel" />
           </div>
           <Suspense fallback={<Skeleton className="size-10 rounded-full" />}>
             <CurrentUserMenu />

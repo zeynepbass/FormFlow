@@ -106,7 +106,7 @@ function AnswerField({ field, register, error }) {
     control = (
       <NativeSelect defaultValue="" {...common}>
         <option value="" disabled={field.required}>
-          {field.placeholder || 'Select an option'}
+          {field.placeholder || 'Bir seçenek belirle'}
         </option>
         {field.options.map((option) => (
           <option key={option.id} value={option.id}>
@@ -149,7 +149,7 @@ function AnswerField({ field, register, error }) {
       {control}
       {field.type === 'file' ? (
         <p className="text-xs text-muted-strong">
-          PDF, PNG, JPEG, WebP or TXT, up to {MAX_FILE_SIZE / 1024 / 1024} MB.
+          PDF, PNG, JPEG, WebP veya TXT; en fazla {MAX_FILE_SIZE / 1024 / 1024} MB.
         </p>
       ) : null}
       <FieldError id={`${field.id}-error`}>{error}</FieldError>
@@ -220,7 +220,7 @@ export function PublicForm({ form }) {
         setError(detail.path, { type: 'server', message: detail.message }),
       );
       if (fieldErrors.length > 0) setFocus(fieldErrors[0].path);
-      else setFormError(error.message || 'Something went wrong. Please try again.');
+      else setFormError(error.message || 'Bir şeyler ters gitti. Lütfen tekrar dene.');
     }
   }
 
@@ -233,7 +233,7 @@ export function PublicForm({ form }) {
           tabIndex={-1}
           className="mt-4 text-xl font-semibold outline-none"
         >
-          Response sent
+          Yanıtın gönderildi
         </h2>
         <p className="mt-2 max-w-md whitespace-pre-line text-muted-strong">{successMessage}</p>
       </div>
@@ -248,8 +248,8 @@ export function PublicForm({ form }) {
       {submitCount > 0 && errorCount > 0 ? (
         <p className="sr-only" role="alert">
           {errorCount === 1
-            ? 'One answer needs attention.'
-            : `${errorCount} answers need attention.`}
+            ? 'Bir yanıtın düzeltilmesi gerekiyor.'
+            : `${errorCount} yanıtın düzeltilmesi gerekiyor.`}
         </p>
       ) : null}
 
@@ -265,7 +265,7 @@ export function PublicForm({ form }) {
       </div>
 
       <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
-        <label htmlFor="website">Website</label>
+        <label htmlFor="website">Web sitesi</label>
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 

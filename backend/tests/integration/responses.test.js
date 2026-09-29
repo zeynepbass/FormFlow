@@ -234,14 +234,14 @@ describe('csv export', () => {
     const res = await agent.get(`/api/forms/${form.id}/export`).buffer(true).expect(200);
     expect(res.headers['content-type']).toBe('text/csv; charset=utf-8');
     expect(res.headers['content-disposition']).toMatch(
-      new RegExp(`attachment; filename="${form.slug}-responses-\\d{4}-\\d{2}-\\d{2}\\.csv"`),
+      new RegExp(`attachment; filename="${form.slug}-yanitlar-\\d{4}-\\d{2}-\\d{2}\\.csv"`),
     );
 
     const [header, row] = res.text
       .replace(/^\uFEFF/, '')
       .trim()
       .split('\r\n');
-    expect(header).toBe('"Submitted at","Response ID","Your name","Email","Topic","Message"');
+    expect(header).toBe('"Gönderim zamanı","Yanıt ID","Your name","Email","Topic","Message"');
     expect(row).toContain(`"'=HYPERLINK(""http://evil"")"`);
     expect(row).toContain('"Support"');
   });

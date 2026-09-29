@@ -54,7 +54,7 @@ export function authRoutes(limiters) {
     const { email } = parse(forgotPasswordSchema, req.body);
     await authService.forgotPassword(email);
     res.status(202).json({
-      data: { message: 'If an account exists for this email, a reset link is on its way.' },
+      data: { message: 'Bu e-posta adresine ait bir hesap varsa sıfırlama bağlantısı gönderildi.' },
     });
   });
 

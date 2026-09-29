@@ -4,7 +4,7 @@ import { removeFolder } from '../../common/storage/files.js';
 import { revalidatePublicForm } from '../../common/utils/revalidate.js';
 import { createSlug } from '../../common/utils/slug.js';
 import { withId } from '../../common/utils/serialize.js';
-import { CHOICE_TYPES, STATUS_TRANSITIONS } from './field-types.js';
+import { CHOICE_TYPES, STATUS_LABELS, STATUS_TRANSITIONS } from './field-types.js';
 import { DEFAULT_SETTINGS } from './forms.schemas.js';
 
 const forms = () => collection('forms');
@@ -30,7 +30,7 @@ export function toFormSummaryDto(form) {
 
 export async function getOwnedForm(ownerId, formId, projection) {
   const form = await forms().findOne({ _id: formId, ownerId }, projection ? { projection } : {});
-  if (!form) throw notFound('Form not found.');
+  if (!form) throw notFound('Form bulunamadı.');
   return form;
 }
 
@@ -68,7 +68,7 @@ async function insertWithUniqueSlug(document) {
       if (error.code !== 11000) throw error;
     }
   }
-  throw conflict('Could not generate a unique address for this form.');
+  throw conflict('Bu form için benzersiz bir adres oluşturulamadı.');
 }
 
 export async function createForm(ownerId, { title, description }) {
@@ -91,7 +91,7 @@ export async function createForm(ownerId, { title, description }) {
 export async function updateForm(ownerId, formId, { version, settings, ...changes }) {
   const current = await getOwnedForm(ownerId, formId, { slug: 1, status: 1, version: 1 });
   if (current.version !== version) {
-    throw conflict('This form was changed somewhere else. Reload to get the latest version.');
+    throw conflict('Bu form başka bir yerde değiştirildi. Son hali için sayfayı yenile.');
   }
 
   const set = { ...changes, updatedAt: new Date() };
@@ -105,11 +105,11 @@ export async function updateForm(ownerId, formId, { version, settings, ...change
       { returnDocument: 'after' },
     );
   } catch (error) {
-    if (error.code === 11000) throw conflict('This address is already taken.');
+    if (error.code === 11000) throw conflict('Bu adres zaten kullanılıyor.');
     throw error;
   }
   if (!updated) {
-    throw conflict('This form was changed somewhere else. Reload to get the latest version.');
+    throw conflict('Bu form başka bir yerde değiştirildi. Son hali için sayfayı yenile.');
   }
 
   if (current.status !== 'draft') await revalidatePublicForm(current.slug, updated.slug);
@@ -121,7 +121,7 @@ export async function duplicateForm(ownerId, formId) {
   const now = new Date();
   return insertWithUniqueSlug({
     ownerId,
-    title: `${source.title} (copy)`.slice(0, 120),
+    title: `${source.title} (kopya)`.slice(0, 120),
     description: source.description,
     status: 'draft',
     fields: source.fields,
@@ -136,15 +136,15 @@ export async function duplicateForm(ownerId, formId) {
 
 export function getPublishProblems(form) {
   const problems = [];
-  if (!form.title?.trim()) problems.push({ path: 'title', message: 'Give your form a title.' });
+  if (!form.title?.trim()) problems.push({ path: 'title', message: 'Formuna bir başlık ver.' });
   if (form.fields.length === 0) {
-    problems.push({ path: 'fields', message: 'Add at least one field before publishing.' });
+    problems.push({ path: 'fields', message: 'Yayınlamadan önce en az bir alan ekle.' });
   }
   form.fields.forEach((field, index) => {
     if (CHOICE_TYPES.has(field.type) && field.options.length === 0) {
       problems.push({
         path: `fields.${index}.options`,
-        message: `"${field.label}" needs at least one option.`,
+        message: `“${field.label}” alanında en az bir seçenek olmalı.`,
       });
     }
   });
@@ -156,13 +156,15 @@ export async function changeStatus(ownerId, formId, action) {
   const form = await getOwnedForm(ownerId, formId);
 
   if (!transition.from.includes(form.status)) {
-    throw conflict(`A ${form.status} form cannot be moved to ${transition.to}.`);
+    throw conflict(
+      `“${STATUS_LABELS[form.status]}” durumundaki bir form “${STATUS_LABELS[transition.to]}” durumuna alınamaz.`,
+    );
   }
 
   if (transition.to === 'published') {
     const problems = getPublishProblems(form);
     if (problems.length > 0) {
-      throw new AppError(409, 'CONFLICT', 'This form is not ready to publish.', problems);
+      throw new AppError(409, 'CONFLICT', 'Bu form yayınlanmaya hazır değil.', problems);
     }
   }
 
@@ -178,7 +180,8 @@ export async function changeStatus(ownerId, formId, action) {
     },
     { returnDocument: 'after' },
   );
-  if (!updated) throw conflict('This form was changed somewhere else. Reload and try again.');
+  if (!updated)
+    throw conflict('Bu form başka bir yerde değiştirildi. Sayfayı yenileyip tekrar dene.');
 
   await revalidatePublicForm(updated.slug);
   return updated;

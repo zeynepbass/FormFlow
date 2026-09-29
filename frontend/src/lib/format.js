@@ -1,9 +1,9 @@
-const dateFormatter = new Intl.DateTimeFormat('en', { dateStyle: 'medium' });
-const dateTimeFormatter = new Intl.DateTimeFormat('en', {
+const dateFormatter = new Intl.DateTimeFormat('tr-TR', { dateStyle: 'medium' });
+const dateTimeFormatter = new Intl.DateTimeFormat('tr-TR', {
   dateStyle: 'medium',
   timeStyle: 'short',
 });
-const numberFormatter = new Intl.NumberFormat('en');
+const numberFormatter = new Intl.NumberFormat('tr-TR');
 
 export function formatDate(value) {
   return value ? dateFormatter.format(new Date(value)) : '—';

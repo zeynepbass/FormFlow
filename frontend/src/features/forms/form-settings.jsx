@@ -19,12 +19,12 @@ const schema = z.object({
     .check(
       z.trim(),
       z.toLowerCase(),
-      z.minLength(3, 'Use at least 3 characters.'),
-      z.maxLength(60, 'Use at most 60 characters.'),
-      z.regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Use lowercase letters, numbers and single dashes.'),
+      z.minLength(3, 'En az 3 karakter kullan.'),
+      z.maxLength(60, 'En fazla 60 karakter kullan.'),
+      z.regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Küçük harf, rakam ve tek tire kullan.'),
     ),
-  submitLabel: requiredText('Enter a button label.', 40),
-  successMessage: requiredText('Enter a message.', 500),
+  submitLabel: requiredText('Buton metnini gir.', 40),
+  successMessage: requiredText('Bir mesaj gir.', 500),
   allowIndexing: z.boolean(),
 });
 
@@ -57,10 +57,10 @@ export function FormSettings({ form }) {
       });
       setVersion(data.version);
       reset({ slug: data.slug, ...data.settings });
-      setStatus({ error: '', success: 'Settings saved.' });
+      setStatus({ error: '', success: 'Ayarlar kaydedildi.' });
       router.refresh();
     } catch (error) {
-      if (error.status === 409 && error.message.includes('address')) {
+      if (error.status === 409 && error.message.includes('adres')) {
         setError('slug', { message: error.message });
       } else if (!applyFieldErrors(error, setError, ['slug'])) {
         setStatus({ error: error.message, success: '' });
@@ -75,8 +75,8 @@ export function FormSettings({ form }) {
 
         <Field
           id="slug"
-          label="Form address"
-          description="Changing the address breaks links you have already shared."
+          label="Form adresi"
+          description="Adresi değiştirirsen daha önce paylaştığın bağlantılar çalışmaz."
           error={errors.slug?.message}
         >
           {(props) => (
@@ -94,13 +94,13 @@ export function FormSettings({ form }) {
           )}
         </Field>
 
-        <Field id="submitLabel" label="Submit button label" error={errors.submitLabel?.message}>
+        <Field id="submitLabel" label="Gönder butonu metni" error={errors.submitLabel?.message}>
           {(props) => <Input {...props} {...register('submitLabel')} />}
         </Field>
 
         <Field
           id="successMessage"
-          label="Message after submitting"
+          label="Gönderim sonrası mesaj"
           error={errors.successMessage?.message}
         >
           {(props) => <Textarea rows={3} {...props} {...register('successMessage')} />}
@@ -116,10 +116,10 @@ export function FormSettings({ form }) {
           />
           <div>
             <label htmlFor="allowIndexing" className="text-sm font-medium">
-              Allow search engines to index this form
+              Bu formun arama motorlarında görünmesine izin ver
             </label>
             <p id="allowIndexing-description" className="text-sm text-muted-strong">
-              Off by default. Leave it off for private or internal forms.
+              Varsayılan olarak kapalı. Özel ya da iç kullanım formları için kapalı bırak.
             </p>
           </div>
         </div>
@@ -127,9 +127,9 @@ export function FormSettings({ form }) {
         <SubmitButton
           pending={isSubmitting}
           disabled={!isDirty || isSubmitting}
-          pendingText="Saving…"
+          pendingText="Kaydediliyor…"
         >
-          Save settings
+          Ayarları kaydet
         </SubmitButton>
       </form>
     </Card>

@@ -3,63 +3,66 @@ import { BarChart3, Download, Inbox, Keyboard, Link2, ListChecks } from 'lucide-
 export const highlights = [
   {
     icon: Keyboard,
-    title: 'A builder that works with any input',
-    body: 'Add, edit, duplicate and reorder fields by dragging, with the keyboard, or with simple move buttons.',
+    title: 'Her kullanıcıya uygun form oluşturucu',
+    body: 'Alanları sürükleyerek, klavyeyle ya da taşıma butonlarıyla ekle, düzenle, kopyala ve sırala.',
   },
   {
     icon: ListChecks,
-    title: 'Eleven field types',
-    body: 'Text, email, number, phone, URL, dropdowns, radio buttons, checkboxes, dates and file uploads.',
+    title: 'On bir alan türü',
+    body: 'Metin, e-posta, sayı, telefon, URL, açılır liste, tek ve çoklu seçim, tarih ve dosya yükleme.',
   },
   {
     icon: Link2,
-    title: 'One clean link to share',
-    body: 'Every published form gets a short address that loads fast on any phone or connection.',
+    title: 'Paylaşması kolay tek bağlantı',
+    body: 'Yayınlanan her form, her telefonda ve bağlantıda hızlı açılan kısa bir adres alır.',
   },
   {
     icon: Inbox,
-    title: 'Responses in one inbox',
-    body: 'Search answers, filter by date and open any submission to see every field in context.',
+    title: 'Tüm yanıtlar tek yerde',
+    body: 'Yanıtlarda ara, tarihe göre filtrele ve her gönderimi tüm alanlarıyla görüntüle.',
   },
   {
     icon: BarChart3,
-    title: 'Numbers that matter',
-    body: 'Views, starts, submissions and completion rate, day by day, without extra setup.',
+    title: 'Önemli olan sayılar',
+    body: 'Görüntülenme, başlama, gönderim ve tamamlama oranı; ek kurulum olmadan, gün gün.',
   },
   {
     icon: Download,
-    title: 'Export when you need to',
-    body: 'Download responses as a CSV that opens safely in Excel, Numbers and Google Sheets.',
+    title: 'İstediğin an dışa aktar',
+    body: 'Yanıtları Excel, Numbers ve Google Sheets’te güvenle açılan bir CSV dosyası olarak indir.',
   },
 ];
 
 export const steps = [
-  { title: 'Build', body: 'Pick fields, write clear labels and mark what is required.' },
-  { title: 'Share', body: 'Publish and send the link. Pause it any time to stop new responses.' },
-  { title: 'Understand', body: 'Read responses as they arrive and see how your form performs.' },
+  { title: 'Oluştur', body: 'Alanları seç, anlaşılır başlıklar yaz ve zorunlu olanları işaretle.' },
+  {
+    title: 'Paylaş',
+    body: 'Formu yayınla ve bağlantıyı gönder. Yeni yanıtları durdurmak için dilediğin an duraklat.',
+  },
+  { title: 'Anla', body: 'Yanıtları geldikçe oku ve formunun nasıl performans gösterdiğini gör.' },
 ];
 
 export const faqs = [
   {
-    question: 'Do people need an account to fill in my form?',
-    answer: 'No. Anyone with the link can open a published form and submit a response.',
+    question: 'Formu dolduracak kişilerin hesap açması gerekiyor mu?',
+    answer: 'Hayır. Bağlantıya sahip herkes yayınlanmış bir formu açıp yanıt gönderebilir.',
   },
   {
-    question: 'Will my forms show up in search engines?',
+    question: 'Formlarım arama motorlarında görünür mü?',
     answer:
-      'Not unless you want them to. Forms are hidden from search engines by default, and you can allow indexing per form in its settings.',
+      'Sen istemedikçe hayır. Formlar varsayılan olarak arama motorlarından gizlenir; istersen her formun ayarlarından dizine eklenmesine izin verebilirsin.',
   },
   {
-    question: 'What happens when I pause a form?',
+    question: 'Bir formu duraklatınca ne olur?',
     answer:
-      'The link keeps working but shows that the form is not accepting responses. Publish it again to reopen it.',
+      'Bağlantı çalışmaya devam eder ama formun şu an yanıt kabul etmediği gösterilir. Yeniden yayınlayarak tekrar açabilirsin.',
   },
   {
-    question: 'Which files can respondents upload?',
-    answer: 'PDF, PNG, JPEG, WebP and plain text files up to 5 MB each.',
+    question: 'Hangi dosyalar yüklenebilir?',
+    answer: 'Her biri en fazla 5 MB olan PDF, PNG, JPEG, WebP ve düz metin dosyaları.',
   },
   {
-    question: 'Can I take my data with me?',
-    answer: 'Yes. Every form can export its responses as a CSV file at any time.',
+    question: 'Verilerimi dışa aktarabilir miyim?',
+    answer: 'Evet. Her formun yanıtlarını dilediğin an CSV dosyası olarak indirebilirsin.',
   },
 ];

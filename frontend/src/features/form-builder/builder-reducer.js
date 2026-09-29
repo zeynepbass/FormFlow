@@ -2,17 +2,17 @@ import { newFieldId, newOptionId } from '@/lib/ids';
 import { CHOICE_TYPES, FORM_LIMITS } from '@/types/field-types';
 
 const DEFAULT_LABELS = {
-  short_text: 'Short answer',
-  long_text: 'Long answer',
-  email: 'Email address',
-  number: 'Number',
-  phone: 'Phone number',
-  url: 'Website',
-  select: 'Choose an option',
-  radio: 'Choose one',
-  checkbox: 'Select all that apply',
-  date: 'Date',
-  file: 'Upload a file',
+  short_text: 'Kısa yanıt',
+  long_text: 'Uzun yanıt',
+  email: 'E-posta adresi',
+  number: 'Sayı',
+  phone: 'Telefon numarası',
+  url: 'Web sitesi',
+  select: 'Bir seçenek belirle',
+  radio: 'Birini seç',
+  checkbox: 'Uygun olanların hepsini seç',
+  date: 'Tarih',
+  file: 'Dosya yükle',
 };
 
 export function createField(type) {
@@ -25,8 +25,8 @@ export function createField(type) {
     required: false,
     options: CHOICE_TYPES.has(type)
       ? [
-          { id: newOptionId(), label: 'Option 1' },
-          { id: newOptionId(), label: 'Option 2' },
+          { id: newOptionId(), label: 'Seçenek 1' },
+          { id: newOptionId(), label: 'Seçenek 2' },
         ]
       : [],
     validation: {},
@@ -105,7 +105,7 @@ export function builderReducer(state, action) {
       const copy = {
         ...source,
         id: newFieldId(),
-        label: `${source.label} (copy)`.slice(0, 200),
+        label: `${source.label} (kopya)`.slice(0, 200),
         options: source.options.map((option) => ({ ...option, id: newOptionId() })),
         validation: { ...source.validation },
       };
@@ -133,7 +133,7 @@ export function builderReducer(state, action) {
               ...field,
               options: [
                 ...field.options,
-                { id: newOptionId(), label: `Option ${field.options.length + 1}` },
+                { id: newOptionId(), label: `Seçenek ${field.options.length + 1}` },
               ],
             },
       );
@@ -162,31 +162,37 @@ export function builderReducer(state, action) {
 
 export function findProblems(state) {
   const problems = [];
-  if (!state.title.trim()) problems.push({ fieldId: null, message: 'Give your form a title.' });
+  if (!state.title.trim()) problems.push({ fieldId: null, message: 'Formuna bir başlık ver.' });
 
   state.fields.forEach((field, index) => {
-    const name = field.label.trim() || `Field ${index + 1}`;
+    const name = field.label.trim() || `Alan ${index + 1}`;
     if (!field.label.trim()) {
-      problems.push({ fieldId: field.id, message: `Field ${index + 1} needs a label.` });
+      problems.push({ fieldId: field.id, message: `${index + 1}. alanın bir başlığı olmalı.` });
     }
     if (CHOICE_TYPES.has(field.type)) {
       if (field.options.length === 0) {
-        problems.push({ fieldId: field.id, message: `“${name}” needs at least one option.` });
+        problems.push({
+          fieldId: field.id,
+          message: `“${name}” alanında en az bir seçenek olmalı.`,
+        });
       }
       if (field.options.some((option) => !option.label.trim())) {
-        problems.push({ fieldId: field.id, message: `“${name}” has an option without a label.` });
+        problems.push({ fieldId: field.id, message: `“${name}” alanında boş bir seçenek var.` });
       }
     }
     const { min, max } = field.validation;
     if (min !== undefined && max !== undefined && min > max) {
-      problems.push({ fieldId: field.id, message: `“${name}” has a minimum above its maximum.` });
+      problems.push({
+        fieldId: field.id,
+        message: `“${name}” alanında en küçük değer en büyük değerden büyük.`,
+      });
     }
   });
 
   if (state.fields.filter((field) => field.type === 'file').length > FORM_LIMITS.fileFields) {
     problems.push({
       fieldId: null,
-      message: `A form can have at most ${FORM_LIMITS.fileFields} file upload fields.`,
+      message: `Bir formda en fazla ${FORM_LIMITS.fileFields} dosya yükleme alanı olabilir.`,
     });
   }
 

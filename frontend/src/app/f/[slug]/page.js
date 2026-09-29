@@ -12,10 +12,10 @@ export async function generateMetadata({ params }) {
   const form = isValidSlug(slug) ? await getPublicForm(slug) : null;
 
   if (!form) {
-    return { title: 'Form not found', robots: { index: false, follow: false } };
+    return { title: 'Form bulunamadı', robots: { index: false, follow: false } };
   }
 
-  const description = form.description?.slice(0, 160) || `Fill in “${form.title}”.`;
+  const description = form.description?.slice(0, 160) || `“${form.title}” formunu doldur.`;
   const indexable = form.status === 'published' && form.settings.allowIndexing;
   const path = `/f/${form.slug}`;
 
@@ -59,7 +59,7 @@ async function FormContent({ params }) {
         ) : null}
         {form.fields.some((field) => field.required) ? (
           <p className="mt-4 text-sm text-muted-strong">
-            Questions marked <span className="text-error-text">*</span> are required.
+            <span className="text-error-text">*</span> ile işaretli sorular zorunludur.
           </p>
         ) : null}
       </header>
@@ -67,8 +67,8 @@ async function FormContent({ params }) {
         {form.status === 'published' ? (
           <PublicForm form={form} />
         ) : (
-          <Alert tone="info" title="This form is not accepting responses right now.">
-            Please check back later or contact the person who shared it with you.
+          <Alert tone="info" title="Bu form şu anda yanıt kabul etmiyor.">
+            Daha sonra tekrar dene ya da formu seninle paylaşan kişiyle iletişime geç.
           </Alert>
         )}
       </div>
@@ -78,7 +78,7 @@ async function FormContent({ params }) {
 
 function FormSkeleton() {
   return (
-    <div role="status" aria-busy="true" aria-label="Loading form" className="space-y-6">
+    <div role="status" aria-busy="true" aria-label="Form yükleniyor" className="space-y-6">
       <Skeleton className="h-9 w-2/3" />
       <Skeleton className="h-5 w-full" />
       <div className="space-y-6 pt-4">
@@ -104,10 +104,10 @@ export default function PublicFormPage({ params }) {
         </div>
       </main>
       <footer className="pb-8 text-center text-sm text-muted-strong">
-        Made with{' '}
         <Link href="/" className="font-medium text-foreground hover:underline">
           FormFlow
-        </Link>
+        </Link>{' '}
+        ile oluşturuldu
       </footer>
     </div>
   );

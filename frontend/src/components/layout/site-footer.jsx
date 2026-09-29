@@ -10,12 +10,12 @@ export function SiteFooter() {
           <Logo />
           <p className="text-sm text-muted-strong">{siteConfig.tagline}</p>
         </div>
-        <nav aria-label="Footer">
+        <nav aria-label="Alt menü">
           <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             {[
               ...marketingNav,
-              { href: '/login', label: 'Log in' },
-              { href: '/register', label: 'Sign up' },
+              { href: '/giris', label: 'Giriş yap' },
+              { href: '/kayit', label: 'Kayıt ol' },
             ].map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="text-muted-strong hover:text-foreground">

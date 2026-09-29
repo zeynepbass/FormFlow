@@ -14,8 +14,8 @@ import { api, applyFieldErrors } from '@/lib/api/client';
 import { requiredText } from '@/lib/validation';
 
 const schema = z.object({
-  title: requiredText('Give your form a title.', 120),
-  description: z.string().check(z.trim(), z.maxLength(1000, 'Use at most 1000 characters.')),
+  title: requiredText('Formuna bir başlık ver.', 120),
+  description: z.string().check(z.trim(), z.maxLength(1000, 'En fazla 1000 karakter kullan.')),
 });
 
 export function CreateForm() {
@@ -32,7 +32,7 @@ export function CreateForm() {
     setFormError('');
     try {
       const { data } = await api('/forms', { method: 'POST', body: values });
-      router.push(`/forms/${data.id}`);
+      router.push(`/formlar/${data.id}`);
     } catch (error) {
       if (!applyFieldErrors(error, setError, ['title', 'description'])) setFormError(error.message);
     }
@@ -42,21 +42,26 @@ export function CreateForm() {
     <Card className="p-6">
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         <FormStatus error={formError} />
-        <Field id="title" label="Title" error={errors.title?.message} required>
+        <Field id="title" label="Başlık" error={errors.title?.message} required>
           {(props) => (
-            <Input placeholder="Customer feedback" autoFocus {...props} {...register('title')} />
+            <Input
+              placeholder="Müşteri geri bildirimi"
+              autoFocus
+              {...props}
+              {...register('title')}
+            />
           )}
         </Field>
         <Field
           id="description"
-          label="Description"
-          description="Shown under the title on the public form. Optional."
+          label="Açıklama"
+          description="Formda başlığın altında gösterilir. İsteğe bağlı."
           error={errors.description?.message}
         >
           {(props) => <Textarea rows={3} {...props} {...register('description')} />}
         </Field>
-        <SubmitButton pending={isSubmitting} pendingText="Creating…">
-          Create and add fields
+        <SubmitButton pending={isSubmitting} pendingText="Oluşturuluyor…">
+          Oluştur ve alan ekle
         </SubmitButton>
       </form>
     </Card>

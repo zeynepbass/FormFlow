@@ -24,7 +24,7 @@ export function UserMenu({ user }) {
 
   async function logout() {
     await api('/auth/logout', { method: 'POST' }).catch(() => {});
-    router.replace('/login');
+    router.replace('/giris');
     router.refresh();
   }
 
@@ -32,7 +32,7 @@ export function UserMenu({ user }) {
     <DropdownMenu>
       <DropdownMenuTrigger
         className="flex size-10 items-center justify-center rounded-full bg-soft-purple text-sm font-semibold text-primary-dark"
-        aria-label={`Account menu for ${user.name}`}
+        aria-label={`${user.name} hesap menüsü`}
       >
         {initials}
       </DropdownMenuTrigger>
@@ -43,14 +43,14 @@ export function UserMenu({ user }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/settings">
+          <Link href="/ayarlar">
             <Settings aria-hidden="true" />
-            Settings
+            Ayarlar
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={logout}>
           <LogOut aria-hidden="true" />
-          Log out
+          Çıkış yap
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

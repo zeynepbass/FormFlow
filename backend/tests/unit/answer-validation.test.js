@@ -24,7 +24,7 @@ describe('validateAnswers', () => {
   it('requires required fields', () => {
     const result = check(field('short_text', { required: true }), '   ');
     expect(result.errors).toEqual([
-      { path: expect.any(String), message: 'This field is required.' },
+      { path: expect.any(String), message: 'Bu alan zorunludur.' },
     ]);
   });
 

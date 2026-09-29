@@ -5,10 +5,10 @@ import { safeRedirectPath } from '@/lib/safe-redirect';
 describe('safeRedirectPath', () => {
   it('allows same-site paths only', () => {
     expect(safeRedirectPath('/forms/abc?x=1')).toBe('/forms/abc?x=1');
-    expect(safeRedirectPath('https://evil.example')).toBe('/dashboard');
-    expect(safeRedirectPath('//evil.example')).toBe('/dashboard');
-    expect(safeRedirectPath('/\\evil.example')).toBe('/dashboard');
-    expect(safeRedirectPath(null)).toBe('/dashboard');
+    expect(safeRedirectPath('https://evil.example')).toBe('/panel');
+    expect(safeRedirectPath('//evil.example')).toBe('/panel');
+    expect(safeRedirectPath('/\\evil.example')).toBe('/panel');
+    expect(safeRedirectPath(null)).toBe('/panel');
   });
 });
 

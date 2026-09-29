@@ -62,35 +62,35 @@ export function FormActionsMenu({ form }) {
             variant="ghost"
             size="icon-sm"
             disabled={pending}
-            aria-label={`Actions for ${form.title}`}
+            aria-label={`${form.title} için işlemler`}
           >
             <Ellipsis aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem asChild>
-            <Link href={`/forms/${form.id}`}>
+            <Link href={`/formlar/${form.id}`}>
               <Pencil aria-hidden="true" />
-              Edit
+              Düzenle
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={`/forms/${form.id}/responses`}>
+            <Link href={`/formlar/${form.id}/yanitlar`}>
               <Inbox aria-hidden="true" />
-              Responses
+              Yanıtlar
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={`/forms/${form.id}/analytics`}>
+            <Link href={`/formlar/${form.id}/analiz`}>
               <ChartColumn aria-hidden="true" />
-              Analytics
+              Analiz
             </Link>
           </DropdownMenuItem>
           {form.status === 'published' || form.status === 'paused' ? (
             <DropdownMenuItem asChild>
               <a href={`/f/${form.slug}`} target="_blank" rel="noopener">
                 <ExternalLink aria-hidden="true" />
-                Open public form
+                Formu görüntüle
               </a>
             </DropdownMenuItem>
           ) : null}
@@ -100,35 +100,35 @@ export function FormActionsMenu({ form }) {
           {form.status === 'draft' || form.status === 'paused' ? (
             <DropdownMenuItem onSelect={statusAction('publish')}>
               <Play aria-hidden="true" />
-              Publish
+              Yayınla
             </DropdownMenuItem>
           ) : null}
           {form.status === 'published' ? (
             <DropdownMenuItem onSelect={statusAction('pause')}>
               <Pause aria-hidden="true" />
-              Pause
+              Duraklat
             </DropdownMenuItem>
           ) : null}
           <DropdownMenuItem
             onSelect={() =>
               run(
                 () => api(`/forms/${form.id}/duplicate`, { method: 'POST' }),
-                ({ data }) => router.push(`/forms/${data.id}`),
+                ({ data }) => router.push(`/formlar/${data.id}`),
               )
             }
           >
             <Copy aria-hidden="true" />
-            Duplicate
+            Kopyala
           </DropdownMenuItem>
           {form.status === 'archived' ? (
             <DropdownMenuItem onSelect={statusAction('restore')}>
               <ArchiveRestore aria-hidden="true" />
-              Restore as draft
+              Taslağa geri al
             </DropdownMenuItem>
           ) : (
             <DropdownMenuItem onSelect={statusAction('archive')}>
               <Archive aria-hidden="true" />
-              Archive
+              Arşivle
             </DropdownMenuItem>
           )}
 
@@ -136,7 +136,7 @@ export function FormActionsMenu({ form }) {
 
           <DropdownMenuItem destructive onSelect={() => setConfirmDelete(true)}>
             <Trash2 aria-hidden="true" />
-            Delete
+            Sil
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -144,15 +144,15 @@ export function FormActionsMenu({ form }) {
       <ConfirmDialog
         open={confirmDelete}
         onOpenChange={setConfirmDelete}
-        title={`Delete “${form.title}”?`}
-        description="The form, its responses and uploaded files will be permanently deleted. This cannot be undone."
-        confirmLabel="Delete form"
+        title={`“${form.title}” silinsin mi?`}
+        description="Form, yanıtları ve yüklenen dosyalar kalıcı olarak silinecek. Bu işlem geri alınamaz."
+        confirmLabel="Formu sil"
         onConfirm={() => {
           setConfirmDelete(false);
           run(
             () => api(`/forms/${form.id}`, { method: 'DELETE' }),
             () => {
-              router.push('/forms');
+              router.push('/formlar');
               router.refresh();
             },
           );

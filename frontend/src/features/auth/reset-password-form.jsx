@@ -29,8 +29,8 @@ export function ResetPasswordForm() {
 
   if (!token) {
     return (
-      <Alert tone="error" title="This reset link is incomplete.">
-        Open the link from your email again, or request a new one.
+      <Alert tone="error" title="Bu sıfırlama bağlantısı eksik.">
+        E-postandaki bağlantıyı tekrar aç ya da yeni bir bağlantı iste.
       </Alert>
     );
   }
@@ -38,11 +38,11 @@ export function ResetPasswordForm() {
   if (done) {
     return (
       <div className="space-y-5">
-        <Alert tone="success" title="Your password has been updated.">
-          For your security, you have been signed out on all devices.
+        <Alert tone="success" title="Şifren güncellendi.">
+          Güvenliğin için tüm cihazlarda oturumun kapatıldı.
         </Alert>
-        <Link href="/login" className={buttonVariants({ className: 'w-full' })}>
-          Log in
+        <Link href="/giris" className={buttonVariants({ className: 'w-full' })}>
+          Giriş yap
         </Link>
       </div>
     );
@@ -61,14 +61,14 @@ export function ResetPasswordForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
       <FormStatus error={formError} />
-      <Field id="password" label="New password" error={errors.password?.message}>
+      <Field id="password" label="Yeni şifre" error={errors.password?.message}>
         {(props) => (
           <Input type="password" autoComplete="new-password" {...props} {...register('password')} />
         )}
       </Field>
       <Field
         id="confirmPassword"
-        label="Confirm new password"
+        label="Yeni şifre (tekrar)"
         error={errors.confirmPassword?.message}
       >
         {(props) => (
@@ -80,8 +80,8 @@ export function ResetPasswordForm() {
           />
         )}
       </Field>
-      <SubmitButton pending={isSubmitting} pendingText="Updating…" className="w-full">
-        Update password
+      <SubmitButton pending={isSubmitting} pendingText="Güncelleniyor…" className="w-full">
+        Şifreyi güncelle
       </SubmitButton>
     </form>
   );

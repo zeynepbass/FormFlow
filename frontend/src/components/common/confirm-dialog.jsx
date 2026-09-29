@@ -23,7 +23,7 @@ export function ConfirmDialog({
           </AlertDialog.Description>
           <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <AlertDialog.Cancel asChild>
-              <Button variant="secondary">Cancel</Button>
+              <Button variant="secondary">Vazgeç</Button>
             </AlertDialog.Cancel>
             <Button variant="danger" onClick={onConfirm} disabled={pending}>
               {confirmLabel}

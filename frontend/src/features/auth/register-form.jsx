@@ -28,7 +28,7 @@ export function RegisterForm() {
     setFormError('');
     try {
       await api('/auth/register', { method: 'POST', body: values });
-      router.replace('/dashboard');
+      router.replace('/panel');
       router.refresh();
     } catch (error) {
       if (error.status === 409) {
@@ -42,24 +42,24 @@ export function RegisterForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
       <FormStatus error={formError} />
-      <Field id="name" label="Name" error={errors.name?.message}>
+      <Field id="name" label="Ad soyad" error={errors.name?.message}>
         {(props) => <Input autoComplete="name" {...props} {...register('name')} />}
       </Field>
-      <Field id="email" label="Email" error={errors.email?.message}>
+      <Field id="email" label="E-posta" error={errors.email?.message}>
         {(props) => <Input type="email" autoComplete="email" {...props} {...register('email')} />}
       </Field>
       <Field
         id="password"
-        label="Password"
-        description="At least 8 characters."
+        label="Şifre"
+        description="En az 8 karakter."
         error={errors.password?.message}
       >
         {(props) => (
           <Input type="password" autoComplete="new-password" {...props} {...register('password')} />
         )}
       </Field>
-      <SubmitButton pending={isSubmitting} pendingText="Creating account…" className="w-full">
-        Create account
+      <SubmitButton pending={isSubmitting} pendingText="Hesap oluşturuluyor…" className="w-full">
+        Hesap oluştur
       </SubmitButton>
     </form>
   );

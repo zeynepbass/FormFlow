@@ -10,7 +10,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Logo />
 
-        <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
+        <nav aria-label="Ana menü" className="hidden items-center gap-1 md:flex">
           {marketingNav.map((item) => (
             <Link
               key={item.href}
@@ -23,11 +23,11 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
-          <Link href="/login" className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
-            Log in
+          <Link href="/giris" className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
+            Giriş yap
           </Link>
-          <Link href="/register" className={buttonVariants({ size: 'sm' })}>
-            Get started
+          <Link href="/kayit" className={buttonVariants({ size: 'sm' })}>
+            Ücretsiz başla
           </Link>
         </div>
 
@@ -38,16 +38,16 @@ export function SiteHeader() {
               size: 'icon',
               className: 'list-none [&::-webkit-details-marker]:hidden',
             })}
-            aria-label="Menu"
+            aria-label="Menü"
           >
             <Menu aria-hidden="true" />
           </summary>
           <nav
-            aria-label="Mobile"
+            aria-label="Mobil menü"
             className="absolute right-0 z-40 mt-2 w-56 rounded-lg border border-border bg-surface p-2 shadow-popover"
           >
             <ul className="space-y-1">
-              {[...marketingNav, { href: '/login', label: 'Log in' }].map((item) => (
+              {[...marketingNav, { href: '/giris', label: 'Giriş yap' }].map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
@@ -58,8 +58,8 @@ export function SiteHeader() {
                 </li>
               ))}
               <li>
-                <Link href="/register" className={buttonVariants({ className: 'mt-1 w-full' })}>
-                  Get started
+                <Link href="/kayit" className={buttonVariants({ className: 'mt-1 w-full' })}>
+                  Ücretsiz başla
                 </Link>
               </li>
             </ul>

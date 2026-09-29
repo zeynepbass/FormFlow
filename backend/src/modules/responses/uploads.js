@@ -50,16 +50,16 @@ export async function inspectUpload(file) {
   const name = sanitizeFilename(file.originalname);
   const extension = path.extname(name).slice(1).toLowerCase();
   const expected = ALLOWED_UPLOADS[extension];
-  if (!expected) throw unsupportedMediaType('Upload a PDF, PNG, JPEG, WebP or TXT file.');
+  if (!expected) throw unsupportedMediaType('PDF, PNG, JPEG, WebP veya TXT dosyası yükle.');
 
   const detected = await fileTypeFromBuffer(file.buffer);
 
   if (expected === 'text/plain') {
     if (detected || !isPlainText(file.buffer)) {
-      throw unsupportedMediaType('The file content does not match its extension.');
+      throw unsupportedMediaType('Dosya içeriği uzantısıyla uyuşmuyor.');
     }
   } else if (detected?.mime !== expected) {
-    throw unsupportedMediaType('The file content does not match its extension.');
+    throw unsupportedMediaType('Dosya içeriği uzantısıyla uyuşmuyor.');
   }
 
   return { name, mimeType: expected, size: file.size };

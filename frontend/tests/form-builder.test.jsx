@@ -35,44 +35,46 @@ const form = {
 };
 
 const fieldOrder = () =>
-  within(screen.getByRole('list', { name: 'Form fields' }))
-    .getAllByRole('button', { name: /^Reorder / })
-    .map((button) => button.getAttribute('aria-label').replace('Reorder ', ''));
+  within(screen.getByRole('list', { name: 'Form alanları' }))
+    .getAllByRole('button', { name: / alanını sırala$/ })
+    .map((button) => button.getAttribute('aria-label').replace(' alanını sırala', ''));
 
 describe('FormBuilder', () => {
   it('adds a field from the palette and marks the form as unsaved', async () => {
     const user = userEvent.setup();
     render(<FormBuilder form={form} />);
 
-    expect(screen.getByText('All changes saved')).toBeInTheDocument();
+    expect(screen.getByText('Tüm değişiklikler kaydedildi')).toBeInTheDocument();
     await user.click(
-      within(screen.getByRole('region', { name: 'Add a field' })).getByRole('button', {
-        name: 'Date',
+      within(screen.getByRole('region', { name: 'Alan ekle' })).getByRole('button', {
+        name: 'Tarih',
       }),
     );
 
-    expect(fieldOrder()).toEqual(['First', 'Date', 'Second']);
-    expect(screen.getByText('Unsaved changes')).toBeInTheDocument();
+    expect(fieldOrder()).toEqual(['First', 'Tarih', 'Second']);
+    expect(screen.getByText('Kaydedilmemiş değişiklikler var')).toBeInTheDocument();
   });
 
   it('reorders with move buttons and announces the change', async () => {
     const user = userEvent.setup();
     render(<FormBuilder form={form} />);
 
-    await user.click(screen.getByRole('button', { name: 'Move Second up' }));
+    await user.click(screen.getByRole('button', { name: 'Second alanını yukarı taşı' }));
     expect(fieldOrder()).toEqual(['Second', 'First']);
-    expect(screen.getByText('Second moved to position 1 of 2.')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Move Second up' })).toBeDisabled();
+    expect(screen.getByText('Second, 2 alan içinde 1. sıraya taşındı.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Second alanını yukarı taşı' })).toBeDisabled();
   });
 
   it('blocks saving when a field has no label', async () => {
     const user = userEvent.setup();
     render(<FormBuilder form={form} />);
 
-    await user.clear(screen.getByLabelText('Question'));
-    await user.click(screen.getByRole('button', { name: /^Save/ }));
+    await user.clear(screen.getByLabelText('Soru'));
+    await user.click(screen.getByRole('button', { name: /^Kaydet/ }));
 
-    expect(screen.getByText('Fix these before saving')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Field 1 needs a label.' })).toBeInTheDocument();
+    expect(screen.getByText('Kaydetmeden önce bunları düzelt')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: '1. alanın bir başlığı olmalı.' }),
+    ).toBeInTheDocument();
   });
 });

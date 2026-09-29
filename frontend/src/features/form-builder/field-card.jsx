@@ -19,7 +19,7 @@ export function FieldCard({ field, index, total, selected, hasProblem, dispatch,
     isDragging,
   } = useSortable({ id: field.id });
   const { icon: Icon, label: typeLabel } = FIELD_TYPE_MAP[field.type];
-  const name = field.label.trim() || `Field ${index + 1}`;
+  const name = field.label.trim() || `Alan ${index + 1}`;
   const editorId = `${field.id}-editor`;
 
   return (
@@ -38,7 +38,7 @@ export function FieldCard({ field, index, total, selected, hasProblem, dispatch,
           ref={setActivatorNodeRef}
           type="button"
           className="flex size-9 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-muted-strong hover:bg-background active:cursor-grabbing"
-          aria-label={`Reorder ${name}`}
+          aria-label={`${name} alanını sırala`}
           {...attributes}
           {...listeners}
         >
@@ -64,7 +64,7 @@ export function FieldCard({ field, index, total, selected, hasProblem, dispatch,
                     {' '}
                     *
                   </span>
-                  <span className="sr-only"> (required)</span>
+                  <span className="sr-only"> (zorunlu)</span>
                 </>
               ) : null}
             </span>
@@ -80,7 +80,7 @@ export function FieldCard({ field, index, total, selected, hasProblem, dispatch,
           <Button
             variant="ghost"
             size="icon-sm"
-            aria-label={`Move ${name} up`}
+            aria-label={`${name} alanını yukarı taşı`}
             disabled={index === 0}
             onClick={() => onMove(index, index - 1)}
             className="hidden sm:inline-flex"
@@ -90,7 +90,7 @@ export function FieldCard({ field, index, total, selected, hasProblem, dispatch,
           <Button
             variant="ghost"
             size="icon-sm"
-            aria-label={`Move ${name} down`}
+            aria-label={`${name} alanını aşağı taşı`}
             disabled={index === total - 1}
             onClick={() => onMove(index, index + 1)}
             className="hidden sm:inline-flex"
@@ -100,7 +100,7 @@ export function FieldCard({ field, index, total, selected, hasProblem, dispatch,
           <Button
             variant="ghost"
             size="icon-sm"
-            aria-label={`Duplicate ${name}`}
+            aria-label={`${name} alanını kopyala`}
             onClick={() => dispatch({ type: 'duplicate', id: field.id })}
           >
             <Copy aria-hidden="true" />
@@ -108,7 +108,7 @@ export function FieldCard({ field, index, total, selected, hasProblem, dispatch,
           <Button
             variant="ghost"
             size="icon-sm"
-            aria-label={`Delete ${name}`}
+            aria-label={`${name} alanını sil`}
             onClick={() => dispatch({ type: 'remove', id: field.id })}
           >
             <Trash2 aria-hidden="true" />
@@ -126,7 +126,7 @@ export function FieldCard({ field, index, total, selected, hasProblem, dispatch,
               onClick={() => onMove(index, index - 1)}
             >
               <ArrowUp aria-hidden="true" />
-              Move up
+              Yukarı taşı
             </Button>
             <Button
               variant="secondary"
@@ -135,7 +135,7 @@ export function FieldCard({ field, index, total, selected, hasProblem, dispatch,
               onClick={() => onMove(index, index + 1)}
             >
               <ArrowDown aria-hidden="true" />
-              Move down
+              Aşağı taşı
             </Button>
           </div>
           <FieldEditor field={field} dispatch={dispatch} />
