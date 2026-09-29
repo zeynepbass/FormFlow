@@ -9,7 +9,7 @@ export function FieldPalette({ fieldCount, fileFieldCount, onAdd }) {
   return (
     <section aria-labelledby="palette-heading">
       <h2 id="palette-heading" className="mb-3 text-sm font-semibold">
-        Add a field
+        Alan ekle
       </h2>
       <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-1">
         {FIELD_TYPE_OPTIONS.map(({ type, label, icon: Icon }) => {
@@ -31,7 +31,7 @@ export function FieldPalette({ fieldCount, fileFieldCount, onAdd }) {
       </ul>
       {full ? (
         <p className="mt-3 text-sm text-muted-strong">
-          Forms can have up to {FORM_LIMITS.fields} fields.
+          Bir formda en fazla {FORM_LIMITS.fields} alan olabilir.
         </p>
       ) : null}
     </section>

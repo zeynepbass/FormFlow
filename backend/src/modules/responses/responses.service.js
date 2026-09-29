@@ -34,7 +34,7 @@ function decodeCursor(cursor) {
     if (!Number.isFinite(time) || !ObjectId.isValid(id)) throw new Error('cursor');
     return { createdAt: new Date(time), id: new ObjectId(id) };
   } catch {
-    throw badRequest('Invalid page cursor.');
+    throw badRequest('Geçersiz sayfa bilgisi.');
   }
 }
 
@@ -97,7 +97,7 @@ export async function getResponse(form, responseId) {
     { _id: responseId, formId: form._id, ownerId: form.ownerId },
     { projection: { searchText: 0 } },
   );
-  if (!response) throw notFound('Response not found.');
+  if (!response) throw notFound('Yanıt bulunamadı.');
   return response;
 }
 
@@ -113,7 +113,7 @@ export async function deleteResponse(form, responseId) {
     formId: form._id,
     ownerId: form.ownerId,
   });
-  if (!response) throw notFound('Response not found.');
+  if (!response) throw notFound('Yanıt bulunamadı.');
 
   await collection('forms').updateOne({ _id: form._id }, { $inc: { responseCount: -1 } });
   await Promise.all(fileKeys(response).map(removeFile));
@@ -124,19 +124,19 @@ export async function openResponseFile(form, responseId, fileId) {
   const file = Object.values(response.answers).find(
     (value) => value && typeof value === 'object' && value.fileId === fileId,
   );
-  if (!file) throw notFound('File not found.');
+  if (!file) throw notFound('Dosya bulunamadı.');
 
   try {
     const { stream, size } = await openFile(file.key);
     return { stream, size, name: file.name, mimeType: file.mimeType };
   } catch {
-    throw notFound('File not found.');
+    throw notFound('Dosya bulunamadı.');
   }
 }
 
 export async function submitResponse(form, { answers: rawAnswers, visitorId }, files) {
   const { answers, uploads, errors, searchText } = validateAnswers(form.fields, rawAnswers, files);
-  if (errors.length > 0) throw badRequest('Some answers need attention.', errors);
+  if (errors.length > 0) throw badRequest('Bazı yanıtların düzeltilmesi gerekiyor.', errors);
 
   const inspected = await Promise.all(
     uploads.map(async ({ field, file }) => ({ field, file, meta: await inspectUpload(file) })),
@@ -176,7 +176,7 @@ export async function exportResponses(form, filters, res) {
     .find(buildFilter(form._id, filters), { projection: { searchText: 0 } })
     .sort({ createdAt: -1, _id: -1 });
 
-  const header = ['Submitted at', 'Response ID', ...form.fields.map((field) => field.label)];
+  const header = ['Gönderim zamanı', 'Yanıt ID', ...form.fields.map((field) => field.label)];
   res.write(CSV_BOM + toCsvRow(header));
 
   try {

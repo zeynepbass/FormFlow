@@ -83,23 +83,25 @@ describe('buildAnswerSchema', () => {
     expect(
       errorsFor({ fld_name000000: '  ', fld_pick000000: null, fld_many000000: false }),
     ).toEqual({
-      fld_name000000: 'This field is required.',
-      fld_pick000000: 'This field is required.',
-      fld_many000000: 'Select at least one option.',
+      fld_name000000: 'Bu alan zorunludur.',
+      fld_pick000000: 'Bu alan zorunludur.',
+      fld_many000000: 'En az bir seçenek seç.',
     });
   });
 
   it('applies per-type rules', () => {
     expect(errorsFor({ fld_name000000: 'far too long a name' }).fld_name000000).toMatch(
-      /at most 10/,
+      /En fazla 10/,
     );
     expect(errorsFor({ fld_mail000000: 'nope' }).fld_mail000000).toBe(
-      'Enter a valid email address.',
+      'Geçerli bir e-posta adresi gir.',
     );
-    expect(errorsFor({ fld_age0000000: '12' }).fld_age0000000).toBe('Enter 18 or more.');
+    expect(errorsFor({ fld_age0000000: '12' }).fld_age0000000).toBe(
+      '18 veya daha büyük bir değer gir.',
+    );
     expect(errorsFor({ fld_site000000: 'javascript:alert(1)' }).fld_site000000).toMatch(/http/);
     expect(errorsFor({ fld_pick000000: 'opt_zzzzzzzz' }).fld_pick000000).toBe(
-      'Choose one of the options.',
+      'Seçeneklerden birini seç.',
     );
   });
 

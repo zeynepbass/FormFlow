@@ -36,7 +36,7 @@ export function FormBuilder({ form }) {
 
   async function save() {
     if (problems.length > 0) {
-      setFeedback({ tone: 'error', title: 'Fix these before saving', items: problems });
+      setFeedback({ tone: 'error', title: 'Kaydetmeden önce bunları düzelt', items: problems });
       return null;
     }
     setPending('save');
@@ -60,7 +60,7 @@ export function FormBuilder({ form }) {
 
   async function publish() {
     if (state.fields.length === 0) {
-      setFeedback({ tone: 'error', title: 'Add at least one field before publishing.' });
+      setFeedback({ tone: 'error', title: 'Yayınlamadan önce en az bir alan ekle.' });
       return;
     }
     if (state.dirty && !(await save())) return;
@@ -68,7 +68,7 @@ export function FormBuilder({ form }) {
     setPending('publish');
     try {
       await api(`/forms/${form.id}/publish`, { method: 'POST' });
-      setFeedback({ tone: 'success', title: 'Your form is live.', link: publicUrl });
+      setFeedback({ tone: 'success', title: 'Formun yayında.', link: publicUrl });
       router.refresh();
     } catch (error) {
       setFeedback({
@@ -97,7 +97,7 @@ export function FormBuilder({ form }) {
     dispatch({ type: 'move', from, to });
     if (announce) {
       setAnnouncement(
-        `${field.label.trim() || 'Field'} moved to position ${to + 1} of ${state.fields.length}.`,
+        `${field.label.trim() || 'Alan'}, ${state.fields.length} alan içinde ${to + 1}. sıraya taşındı.`,
       );
     }
   }
@@ -129,14 +129,18 @@ export function FormBuilder({ form }) {
     <div>
       <div className="sticky top-0 z-20 -mx-4 mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-border bg-background/95 px-4 py-3 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10">
         <p className="text-sm text-muted-strong" aria-live="polite">
-          {pending === 'save' ? 'Saving…' : state.dirty ? 'Unsaved changes' : 'All changes saved'}
+          {pending === 'save'
+            ? 'Kaydediliyor…'
+            : state.dirty
+              ? 'Kaydedilmemiş değişiklikler var'
+              : 'Tüm değişiklikler kaydedildi'}
         </p>
         <div className="flex flex-wrap gap-2">
           {isLive ? (
             <>
               <Button variant="ghost" size="sm" onClick={copyLink}>
                 {copied ? <Check aria-hidden="true" /> : <Link2 aria-hidden="true" />}
-                {copied ? 'Copied' : 'Copy link'}
+                {copied ? 'Kopyalandı' : 'Bağlantıyı kopyala'}
               </Button>
               <a
                 href={publicUrl}
@@ -145,7 +149,7 @@ export function FormBuilder({ form }) {
                 className={buttonVariants({ variant: 'ghost', size: 'sm' })}
               >
                 <ExternalLink aria-hidden="true" />
-                View
+                Görüntüle
               </a>
             </>
           ) : null}
@@ -156,13 +160,13 @@ export function FormBuilder({ form }) {
             disabled={!state.dirty || pending !== null}
           >
             <Save aria-hidden="true" />
-            Save
+            Kaydet
             <kbd className="hidden text-xs text-muted-strong sm:inline">⌘S</kbd>
           </Button>
           {canPublish ? (
             <Button size="sm" onClick={publish} disabled={pending !== null}>
               <Send aria-hidden="true" />
-              {form.status === 'paused' ? 'Resume' : 'Publish'}
+              {form.status === 'paused' ? 'Devam ettir' : 'Yayınla'}
             </Button>
           ) : null}
         </div>
@@ -197,7 +201,7 @@ export function FormBuilder({ form }) {
                 rel="noopener"
                 className="font-medium text-primary-dark underline"
               >
-                Open {feedback.link}
+                {feedback.link} adresini aç
               </a>
             ) : null}
           </Alert>
@@ -208,8 +212,8 @@ export function FormBuilder({ form }) {
       </p>
 
       {form.status === 'archived' ? (
-        <Alert tone="info" title="This form is archived." className="mb-6">
-          Restore it from the actions menu to publish it again.
+        <Alert tone="info" title="Bu form arşivlendi." className="mb-6">
+          Tekrar yayınlamak için işlemler menüsünden taslağa geri al.
         </Alert>
       ) : null}
 
@@ -217,7 +221,7 @@ export function FormBuilder({ form }) {
         <div className="space-y-6">
           <Card className="space-y-4 p-5">
             <div className="space-y-1.5">
-              <Label htmlFor="form-title">Form title</Label>
+              <Label htmlFor="form-title">Form başlığı</Label>
               <Input
                 id="form-title"
                 value={state.title}
@@ -229,13 +233,13 @@ export function FormBuilder({ form }) {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="form-description">Description</Label>
+              <Label htmlFor="form-description">Açıklama</Label>
               <Textarea
                 id="form-description"
                 rows={2}
                 maxLength={1000}
                 value={state.description}
-                placeholder="Tell people what this form is for"
+                placeholder="Bu formun ne için olduğunu anlat"
                 onChange={(event) =>
                   dispatch({ type: 'set_meta', key: 'description', value: event.target.value })
                 }
@@ -245,7 +249,7 @@ export function FormBuilder({ form }) {
 
           <section aria-labelledby="fields-heading">
             <h2 id="fields-heading" className="mb-3 text-sm font-semibold">
-              Fields <span className="font-normal text-muted-strong">({state.fields.length})</span>
+              Alanlar <span className="font-normal text-muted-strong">({state.fields.length})</span>
             </h2>
             {state.fields.length > 0 ? (
               <FieldList
@@ -257,7 +261,7 @@ export function FormBuilder({ form }) {
               />
             ) : (
               <p className="rounded-lg border border-dashed border-border bg-surface px-6 py-10 text-center text-sm text-muted-strong">
-                No fields yet. Pick a field type to add your first question.
+                Henüz alan yok. İlk sorunu eklemek için bir alan türü seç.
               </p>
             )}
           </section>

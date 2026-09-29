@@ -57,7 +57,7 @@ export function responsesRoutes() {
 
     res.set({
       'content-type': 'text/csv; charset=utf-8',
-      'content-disposition': `attachment; filename="${form.slug}-responses-${date}.csv"`,
+      'content-disposition': `attachment; filename="${form.slug}-yanitlar-${date}.csv"`,
       'cache-control': 'private, no-store',
     });
     await responsesService.exportResponses(form, filters, res);

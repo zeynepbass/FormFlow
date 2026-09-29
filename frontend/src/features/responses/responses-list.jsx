@@ -3,25 +3,27 @@ import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { formatDateTime, formatNumber } from '@/lib/format';
 import { formatAnswer } from './format-answer';
+import { CURSOR_PARAM, DIRECTION_PARAM, FILTER_PARAMS, PREVIOUS } from './url-params';
 
 const PREVIEW_FIELDS = 3;
 
 function pageHref(formId, filters, cursor, dir) {
   const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(filters)) if (value) params.set(key, value);
-  params.set('cursor', cursor);
-  if (dir === 'prev') params.set('dir', 'prev');
-  return `/forms/${formId}/responses?${params}`;
+  for (const [key, value] of Object.entries(filters))
+    if (value) params.set(FILTER_PARAMS[key], value);
+  params.set(CURSOR_PARAM, cursor);
+  if (dir === 'prev') params.set(DIRECTION_PARAM, PREVIOUS);
+  return `/formlar/${formId}/yanitlar?${params}`;
 }
 
 export function ResponsesList({ form, responses, meta, filters }) {
   const columns = form.fields.filter((field) => field.type !== 'file').slice(0, PREVIEW_FIELDS);
-  const detailHref = (response) => `/forms/${form.id}/responses/${response.id}`;
+  const detailHref = (response) => `/formlar/${form.id}/yanitlar/${response.id}`;
 
   return (
     <>
       <p className="mb-3 text-sm text-muted-strong" aria-live="polite">
-        {formatNumber(meta.total)} {meta.total === 1 ? 'response' : 'responses'}
+        {formatNumber(meta.total)} yanıt
       </p>
 
       <ul className="space-y-3 md:hidden">
@@ -47,11 +49,11 @@ export function ResponsesList({ form, responses, meta, filters }) {
 
       <div className="hidden overflow-x-auto rounded-lg border border-border bg-surface md:block">
         <table className="w-full text-left text-sm">
-          <caption className="sr-only">Responses to {form.title}</caption>
+          <caption className="sr-only">{form.title} yanıtları</caption>
           <thead className="border-b border-border text-muted-strong">
             <tr>
               <th scope="col" className="px-4 py-3 font-medium whitespace-nowrap">
-                Submitted
+                Gönderim
               </th>
               {columns.map((field) => (
                 <th key={field.id} scope="col" className="max-w-48 truncate px-4 py-3 font-medium">
@@ -59,7 +61,7 @@ export function ResponsesList({ form, responses, meta, filters }) {
                 </th>
               ))}
               <th scope="col" className="px-4 py-3">
-                <span className="sr-only">Details</span>
+                <span className="sr-only">Ayrıntılar</span>
               </th>
             </tr>
           </thead>
@@ -79,10 +81,10 @@ export function ResponsesList({ form, responses, meta, filters }) {
                     href={detailHref(response)}
                     className="font-medium text-primary-dark hover:underline"
                   >
-                    View
+                    Görüntüle
                     <span className="sr-only">
                       {' '}
-                      response from {formatDateTime(response.createdAt)}
+                      {formatDateTime(response.createdAt)} tarihli yanıt
                     </span>
                   </Link>
                 </td>
@@ -93,14 +95,14 @@ export function ResponsesList({ form, responses, meta, filters }) {
       </div>
 
       {meta.prevCursor || meta.nextCursor ? (
-        <nav aria-label="Pagination" className="mt-6 flex justify-between gap-3">
+        <nav aria-label="Sayfalama" className="mt-6 flex justify-between gap-3">
           {meta.prevCursor ? (
             <Link
               href={pageHref(form.id, filters, meta.prevCursor, 'prev')}
               className={buttonVariants({ variant: 'secondary' })}
             >
               <ChevronLeft aria-hidden="true" />
-              Newer
+              Daha yeni
             </Link>
           ) : (
             <span />
@@ -110,7 +112,7 @@ export function ResponsesList({ form, responses, meta, filters }) {
               href={pageHref(form.id, filters, meta.nextCursor, 'next')}
               className={buttonVariants({ variant: 'secondary' })}
             >
-              Older
+              Daha eski
               <ChevronRight aria-hidden="true" />
             </Link>
           ) : null}

@@ -14,15 +14,15 @@ export function VerifyEmailPanel() {
   const [state, setState] = useState({ pending: false, done: false, error: '' });
 
   if (!token) {
-    return <Alert tone="error" title="This verification link is incomplete." />;
+    return <Alert tone="error" title="Bu doğrulama bağlantısı eksik." />;
   }
 
   if (state.done) {
     return (
       <div className="space-y-5">
-        <Alert tone="success" title="Your email address is confirmed." />
-        <Link href="/dashboard" className={buttonVariants({ className: 'w-full' })}>
-          Go to dashboard
+        <Alert tone="success" title="E-posta adresin doğrulandı." />
+        <Link href="/panel" className={buttonVariants({ className: 'w-full' })}>
+          Panele git
         </Link>
       </div>
     );
@@ -47,8 +47,8 @@ export function VerifyEmailPanel() {
       }}
     >
       <FormStatus error={state.error} />
-      <SubmitButton pending={state.pending} pendingText="Confirming…" className="w-full">
-        Confirm email
+      <SubmitButton pending={state.pending} pendingText="Doğrulanıyor…" className="w-full">
+        E-postayı doğrula
       </SubmitButton>
     </form>
   );

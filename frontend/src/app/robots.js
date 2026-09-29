@@ -5,7 +5,7 @@ export default function robots() {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/dashboard', '/forms', '/settings', '/revalidate'],
+      disallow: ['/api/', '/panel', '/formlar', '/ayarlar', '/revalidate'],
     },
     sitemap: `${siteConfig.url}/sitemap.xml`,
     host: siteConfig.url,

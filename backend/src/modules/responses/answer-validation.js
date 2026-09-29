@@ -24,10 +24,10 @@ function isValidDate(value) {
 }
 
 function validateText(field, raw) {
-  if (typeof raw !== 'string') return { error: 'Enter text.' };
+  if (typeof raw !== 'string') return { error: 'Metin gir.' };
   const value = raw.trim();
   const limit = Math.min(field.validation?.maxLength ?? Infinity, TEXT_LIMITS[field.type]);
-  if (value.length > limit) return { error: `Use at most ${limit} characters.` };
+  if (value.length > limit) return { error: `En fazla ${limit} karakter kullan.` };
   return { value };
 }
 
@@ -36,39 +36,42 @@ const validators = {
   long_text: validateText,
 
   email(field, raw) {
-    if (typeof raw !== 'string' || raw.length > 254) return { error: 'Enter a valid email.' };
+    if (typeof raw !== 'string' || raw.length > 254)
+      return { error: 'Geçerli bir e-posta adresi gir.' };
     const value = raw.trim().toLowerCase();
-    return emailSchema.safeParse(value).success ? { value } : { error: 'Enter a valid email.' };
+    return emailSchema.safeParse(value).success
+      ? { value }
+      : { error: 'Geçerli bir e-posta adresi gir.' };
   },
 
   number(field, raw) {
     const value = typeof raw === 'string' && raw.trim() !== '' ? Number(raw) : raw;
-    if (typeof value !== 'number' || !Number.isFinite(value)) return { error: 'Enter a number.' };
+    if (typeof value !== 'number' || !Number.isFinite(value)) return { error: 'Bir sayı gir.' };
     const { min, max } = field.validation ?? {};
-    if (min !== undefined && value < min) return { error: `Enter ${min} or more.` };
-    if (max !== undefined && value > max) return { error: `Enter ${max} or less.` };
+    if (min !== undefined && value < min) return { error: `${min} veya daha büyük bir değer gir.` };
+    if (max !== undefined && value > max) return { error: `${max} veya daha küçük bir değer gir.` };
     return { value };
   },
 
   phone(field, raw) {
-    if (typeof raw !== 'string') return { error: 'Enter a valid phone number.' };
+    if (typeof raw !== 'string') return { error: 'Geçerli bir telefon numarası gir.' };
     const value = raw.trim();
     const digits = value.replace(/\D/g, '').length;
     if (!PHONE_PATTERN.test(value) || digits < 6 || digits > 15) {
-      return { error: 'Enter a valid phone number.' };
+      return { error: 'Geçerli bir telefon numarası gir.' };
     }
     return { value };
   },
 
   url(field, raw) {
-    if (typeof raw !== 'string' || raw.length > 2048) return { error: 'Enter a valid URL.' };
+    if (typeof raw !== 'string' || raw.length > 2048) return { error: 'Geçerli bir adres gir.' };
     const value = raw.trim();
     try {
       const url = new URL(value);
       if (url.protocol !== 'http:' && url.protocol !== 'https:') throw new Error('protocol');
       return { value };
     } catch {
-      return { error: 'Enter a full URL starting with http:// or https://.' };
+      return { error: 'http:// veya https:// ile başlayan tam bir adres gir.' };
     }
   },
 
@@ -78,23 +81,22 @@ const validators = {
   checkbox(field, raw) {
     const ids = Array.isArray(raw) ? raw : [raw];
     if (ids.length > field.options.length || ids.some((id) => typeof id !== 'string')) {
-      return { error: 'Choose from the available options.' };
+      return { error: 'Mevcut seçeneklerden seç.' };
     }
     const selected = field.options.filter((option) => ids.includes(option.id));
-    if (selected.length !== new Set(ids).size)
-      return { error: 'Choose from the available options.' };
+    if (selected.length !== new Set(ids).size) return { error: 'Mevcut seçeneklerden seç.' };
     return { value: selected.map((option) => option.label) };
   },
 
   date(field, raw) {
-    if (typeof raw !== 'string' || !isValidDate(raw)) return { error: 'Enter a valid date.' };
+    if (typeof raw !== 'string' || !isValidDate(raw)) return { error: 'Geçerli bir tarih gir.' };
     return { value: raw };
   },
 };
 
 function validateSingleChoice(field, raw) {
   const option = typeof raw === 'string' ? field.options.find((item) => item.id === raw) : null;
-  if (!option) return { error: 'Choose one of the options.' };
+  if (!option) return { error: 'Seçeneklerden birini seç.' };
   return { value: option.label };
 }
 
@@ -109,7 +111,7 @@ export function validateAnswers(fields, rawAnswers, files = []) {
   for (const file of files) {
     const field = fields.find((item) => item.id === file.fieldname && item.type === 'file');
     if (!field || filesByField.has(field.id)) {
-      errors.push({ path: file.fieldname, message: 'Unexpected file.' });
+      errors.push({ path: file.fieldname, message: 'Beklenmeyen dosya.' });
       continue;
     }
     filesByField.set(field.id, file);
@@ -119,13 +121,13 @@ export function validateAnswers(fields, rawAnswers, files = []) {
     if (field.type === 'file') {
       const file = filesByField.get(field.id);
       if (file) uploads.push({ field, file });
-      else if (field.required) errors.push({ path: field.id, message: 'Attach a file.' });
+      else if (field.required) errors.push({ path: field.id, message: 'Bir dosya ekle.' });
       continue;
     }
 
     const raw = Object.hasOwn(input, field.id) ? input[field.id] : undefined;
     if (isEmpty(raw)) {
-      if (field.required) errors.push({ path: field.id, message: 'This field is required.' });
+      if (field.required) errors.push({ path: field.id, message: 'Bu alan zorunludur.' });
       continue;
     }
 

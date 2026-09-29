@@ -58,7 +58,7 @@ describe('auth', () => {
       .post('/api/auth/login')
       .send({ email: credentials.email, password: 'wrong password' })
       .expect(401);
-    expect(wrong.body.error.message).toBe('Email or password is incorrect.');
+    expect(wrong.body.error.message).toBe('E-posta veya şifre hatalı.');
 
     const unknown = await agent
       .post('/api/auth/login')

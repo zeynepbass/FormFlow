@@ -5,19 +5,19 @@ import { useParams, usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const tabs = [
-  { segment: '', label: 'Build' },
-  { segment: '/responses', label: 'Responses' },
-  { segment: '/analytics', label: 'Analytics' },
-  { segment: '/settings', label: 'Settings' },
+  { segment: '', label: 'Oluştur' },
+  { segment: '/yanitlar', label: 'Yanıtlar' },
+  { segment: '/analiz', label: 'Analiz' },
+  { segment: '/ayarlar', label: 'Ayarlar' },
 ];
 
 export function FormTabs() {
   const { id } = useParams();
   const pathname = usePathname();
-  const base = `/forms/${id}`;
+  const base = `/formlar/${id}`;
 
   return (
-    <nav aria-label="Form sections" className="-mx-1 mb-8 overflow-x-auto border-b border-border">
+    <nav aria-label="Form bölümleri" className="-mx-1 mb-8 overflow-x-auto border-b border-border">
       <ul className="flex gap-1 px-1">
         {tabs.map((tab) => {
           const href = `${base}${tab.segment}`;

@@ -27,6 +27,13 @@ export const FORM_LIMITS = {
 
 export const FORM_STATUSES = ['draft', 'published', 'paused', 'archived'];
 
+export const STATUS_LABELS = {
+  draft: 'Taslak',
+  published: 'Yayında',
+  paused: 'Duraklatıldı',
+  archived: 'Arşivlendi',
+};
+
 export const STATUS_TRANSITIONS = {
   publish: { from: ['draft', 'paused'], to: 'published' },
   pause: { from: ['published'], to: 'paused' },

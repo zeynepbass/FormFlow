@@ -1,7 +1,7 @@
 import * as z from 'zod/mini';
 import { MAX_FILE_SIZE, TEXT_LIMITS } from '@/types/field-types';
 
-const REQUIRED = 'This field is required.';
+const REQUIRED = 'Bu alan zorunludur.';
 const PHONE_PATTERN = /^\+?[0-9\s().-]{6,24}$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const FILE_EXTENSIONS = ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'txt'];
@@ -35,47 +35,47 @@ function valueSchema(field) {
     case 'short_text':
     case 'long_text': {
       const limit = Math.min(maxLength ?? Infinity, TEXT_LIMITS[field.type]);
-      return trimmed().check(z.maxLength(limit, `Use at most ${limit} characters.`));
+      return trimmed().check(z.maxLength(limit, `En fazla ${limit} karakter kullan.`));
     }
     case 'email':
-      return z.pipe(trimmed(), z.email({ error: 'Enter a valid email address.' }));
+      return z.pipe(trimmed(), z.email({ error: 'Geçerli bir e-posta adresi gir.' }));
     case 'number': {
-      const checks = [z.refine(Number.isFinite, 'Enter a number.')];
+      const checks = [z.refine(Number.isFinite, 'Bir sayı gir.')];
       if (min !== undefined)
-        checks.push(z.refine((value) => value >= min, `Enter ${min} or more.`));
+        checks.push(z.refine((value) => value >= min, `${min} veya daha büyük bir değer gir.`));
       if (max !== undefined)
-        checks.push(z.refine((value) => value <= max, `Enter ${max} or less.`));
-      return z.coerce.number({ error: 'Enter a number.' }).check(...checks);
+        checks.push(z.refine((value) => value <= max, `${max} veya daha küçük bir değer gir.`));
+      return z.coerce.number({ error: 'Bir sayı gir.' }).check(...checks);
     }
     case 'phone':
       return trimmed().check(
         z.refine((value) => {
           const digits = value.replace(/\D/g, '').length;
           return PHONE_PATTERN.test(value) && digits >= 6 && digits <= 15;
-        }, 'Enter a valid phone number.'),
+        }, 'Geçerli bir telefon numarası gir.'),
       );
     case 'url':
       return z.pipe(
         trimmed(),
         z.url({
           protocol: /^https?$/,
-          error: 'Enter a full URL starting with http:// or https://.',
+          error: 'http:// veya https:// ile başlayan tam bir adres gir.',
         }),
       );
     case 'select':
     case 'radio':
       return z.enum(
         field.options.map((option) => option.id),
-        { error: 'Choose one of the options.' },
+        { error: 'Seçeneklerden birini seç.' },
       );
     case 'date':
-      return z.string().check(z.regex(DATE_PATTERN, 'Enter a valid date.'));
+      return z.string().check(z.regex(DATE_PATTERN, 'Geçerli bir tarih gir.'));
     case 'file':
       return z.instanceof(File).check(
-        z.refine((file) => file.size <= MAX_FILE_SIZE, 'Files must be 5 MB or smaller.'),
+        z.refine((file) => file.size <= MAX_FILE_SIZE, 'Dosya en fazla 5 MB olmalı.'),
         z.refine(
           (file) => FILE_EXTENSIONS.includes(file.name.split('.').pop()?.toLowerCase()),
-          'Upload a PDF, PNG, JPEG, WebP or TXT file.',
+          'PDF, PNG, JPEG, WebP veya TXT dosyası yükle.',
         ),
       );
     default:
@@ -86,7 +86,7 @@ function valueSchema(field) {
 function fieldSchema(field) {
   if (field.type === 'checkbox') {
     let schema = z.array(z.enum(field.options.map((option) => option.id)));
-    if (field.required) schema = schema.check(z.minLength(1, 'Select at least one option.'));
+    if (field.required) schema = schema.check(z.minLength(1, 'En az bir seçenek seç.'));
     return z.pipe(z.transform(toArray), schema);
   }
 

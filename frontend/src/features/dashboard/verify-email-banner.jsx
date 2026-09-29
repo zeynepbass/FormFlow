@@ -19,19 +19,19 @@ export function VerifyEmailBanner({ email }) {
   }
 
   const messages = {
-    sent: 'A new confirmation link is on its way.',
-    error: 'Could not send the email. Please try again later.',
+    sent: 'Yeni doğrulama bağlantısı gönderildi.',
+    error: 'E-posta gönderilemedi. Lütfen daha sonra tekrar dene.',
   };
 
   return (
-    <Alert tone="info" title="Confirm your email address" className="mb-8">
+    <Alert tone="info" title="E-posta adresini doğrula" className="mb-8">
       <p>
-        We sent a confirmation link to{' '}
-        <strong className="font-medium text-foreground">{email}</strong>.
+        <strong className="font-medium text-foreground">{email}</strong> adresine bir doğrulama
+        bağlantısı gönderdik.
       </p>
       <div className="mt-2 flex flex-wrap items-center gap-3" aria-live="polite">
         <Button variant="link" onClick={resend} disabled={state === 'sending' || state === 'sent'}>
-          Resend link
+          Bağlantıyı tekrar gönder
         </Button>
         {messages[state] ? <span>{messages[state]}</span> : null}
       </div>

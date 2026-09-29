@@ -98,7 +98,7 @@ describe('forms', () => {
     const copy = await agent.post(`/api/forms/${form.id}/duplicate`).expect(201);
 
     expect(copy.body.data).toMatchObject({
-      title: 'Contact form (copy)',
+      title: 'Contact form (kopya)',
       status: 'draft',
       responseCount: 0,
     });

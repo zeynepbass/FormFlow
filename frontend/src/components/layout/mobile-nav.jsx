@@ -13,26 +13,26 @@ export function MobileNav() {
   return (
     <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
       <DialogPrimitive.Trigger asChild>
-        <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open navigation">
+        <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Menüyü aç">
           <Menu aria-hidden="true" />
         </Button>
       </DialogPrimitive.Trigger>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-overlay lg:hidden" />
         <DialogPrimitive.Content className="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] border-r border-border bg-surface p-4 lg:hidden">
-          <DialogPrimitive.Title className="sr-only">Navigation</DialogPrimitive.Title>
+          <DialogPrimitive.Title className="sr-only">Menü</DialogPrimitive.Title>
           <DialogPrimitive.Description className="sr-only">
-            Main sections of your workspace
+            Çalışma alanının ana bölümleri
           </DialogPrimitive.Description>
           <div className="mb-6 flex items-center justify-between">
-            <Logo href="/dashboard" />
+            <Logo href="/panel" />
             <DialogPrimitive.Close asChild>
-              <Button variant="ghost" size="icon-sm" aria-label="Close navigation">
+              <Button variant="ghost" size="icon-sm" aria-label="Menüyü kapat">
                 <X aria-hidden="true" />
               </Button>
             </DialogPrimitive.Close>
           </div>
-          <nav aria-label="Workspace">
+          <nav aria-label="Çalışma alanı">
             <AppNavLinks onNavigate={() => setOpen(false)} />
           </nav>
         </DialogPrimitive.Content>

@@ -1,14 +1,6 @@
 import { randomId } from './tokens.js';
 
-export const RESERVED_SLUGS = new Set([
-  'new',
-  'create',
-  'edit',
-  'admin',
-  'api',
-  'login',
-  'register',
-]);
+export const RESERVED_SLUGS = new Set(['yeni', 'admin', 'api', 'giris', 'kayit', 'panel']);
 
 export function slugify(value) {
   return value

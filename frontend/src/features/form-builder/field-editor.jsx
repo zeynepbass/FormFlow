@@ -23,7 +23,7 @@ export function FieldEditor({ field, dispatch }) {
   return (
     <div className="grid gap-4 border-t border-border px-4 pt-4 pb-5 sm:grid-cols-2">
       <div className="space-y-1.5 sm:col-span-2">
-        <Label htmlFor={id('label')}>Question</Label>
+        <Label htmlFor={id('label')}>Soru</Label>
         <Input
           id={id('label')}
           value={field.label}
@@ -34,20 +34,20 @@ export function FieldEditor({ field, dispatch }) {
       </div>
 
       <div className="space-y-1.5 sm:col-span-2">
-        <Label htmlFor={id('description')}>Help text</Label>
+        <Label htmlFor={id('description')}>Yardım metni</Label>
         <Textarea
           id={id('description')}
           rows={2}
           maxLength={500}
           value={field.description}
-          placeholder="Optional hint shown under the question"
+          placeholder="Sorunun altında gösterilen isteğe bağlı ipucu"
           onChange={(event) => update({ description: event.target.value })}
         />
       </div>
 
       {PLACEHOLDER_TYPES.has(field.type) ? (
         <div className="space-y-1.5 sm:col-span-2">
-          <Label htmlFor={id('placeholder')}>Placeholder</Label>
+          <Label htmlFor={id('placeholder')}>Yer tutucu</Label>
           <Input
             id={id('placeholder')}
             maxLength={150}
@@ -59,12 +59,12 @@ export function FieldEditor({ field, dispatch }) {
 
       {CHOICE_TYPES.has(field.type) ? (
         <fieldset className="space-y-2 sm:col-span-2">
-          <legend className="mb-1.5 text-sm font-medium">Options</legend>
+          <legend className="mb-1.5 text-sm font-medium">Seçenekler</legend>
           <ol className="space-y-2">
             {field.options.map((option, index) => (
               <li key={option.id} className="flex items-center gap-2">
                 <Input
-                  aria-label={`Option ${index + 1}`}
+                  aria-label={`Seçenek ${index + 1}`}
                   value={option.label}
                   maxLength={200}
                   onChange={(event) =>
@@ -80,7 +80,7 @@ export function FieldEditor({ field, dispatch }) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  aria-label={`Remove option ${index + 1}`}
+                  aria-label={`${index + 1}. seçeneği kaldır`}
                   disabled={field.options.length <= 1}
                   onClick={() =>
                     dispatch({ type: 'remove_option', id: field.id, optionId: option.id })
@@ -98,7 +98,7 @@ export function FieldEditor({ field, dispatch }) {
             onClick={() => dispatch({ type: 'add_option', id: field.id })}
           >
             <Plus aria-hidden="true" />
-            Add option
+            Seçenek ekle
           </Button>
         </fieldset>
       ) : null}
@@ -106,7 +106,7 @@ export function FieldEditor({ field, dispatch }) {
       {field.type === 'number' ? (
         <>
           <div className="space-y-1.5">
-            <Label htmlFor={id('min')}>Minimum</Label>
+            <Label htmlFor={id('min')}>En küçük değer</Label>
             <Input
               id={id('min')}
               type="number"
@@ -116,7 +116,7 @@ export function FieldEditor({ field, dispatch }) {
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor={id('max')}>Maximum</Label>
+            <Label htmlFor={id('max')}>En büyük değer</Label>
             <Input
               id={id('max')}
               type="number"
@@ -130,7 +130,7 @@ export function FieldEditor({ field, dispatch }) {
 
       {field.type === 'short_text' || field.type === 'long_text' ? (
         <div className="space-y-1.5">
-          <Label htmlFor={id('max-length')}>Character limit</Label>
+          <Label htmlFor={id('max-length')}>Karakter sınırı</Label>
           <Input
             id={id('max-length')}
             type="number"
@@ -160,7 +160,7 @@ export function FieldEditor({ field, dispatch }) {
           checked={field.required}
           onChange={(event) => update({ required: event.target.checked })}
         />
-        <Label htmlFor={id('required')}>Required</Label>
+        <Label htmlFor={id('required')}>Zorunlu</Label>
       </div>
     </div>
   );

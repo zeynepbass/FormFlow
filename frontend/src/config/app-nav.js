@@ -1,7 +1,7 @@
 import { FileText, LayoutDashboard, Settings } from 'lucide-react';
 
 export const appNav = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/forms', label: 'Forms', icon: FileText },
-  { href: '/settings', label: 'Settings', icon: Settings },
+  { href: '/panel', label: 'Panel', icon: LayoutDashboard },
+  { href: '/formlar', label: 'Formlar', icon: FileText },
+  { href: '/ayarlar', label: 'Ayarlar', icon: Settings },
 ];

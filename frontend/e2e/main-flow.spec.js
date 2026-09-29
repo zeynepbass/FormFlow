@@ -2,86 +2,86 @@ import { readFile } from 'node:fs/promises';
 import { expect, test } from '@playwright/test';
 import { PASSWORD, login, uniqueEmail } from './helpers';
 
-test('owner builds, publishes and reviews a form end to end', async ({
+test('form sahibi formu oluşturur, yayınlar ve yanıtları inceler', async ({
   page,
   browser,
   baseURL,
 }) => {
   const email = uniqueEmail();
 
-  await test.step('register', async () => {
-    await page.goto('/register');
-    await page.getByLabel('Name').fill('Ada Lovelace');
-    await page.getByLabel('Email').fill(email);
-    await page.getByLabel('Password').fill(PASSWORD);
-    await page.getByRole('button', { name: 'Create account' }).click();
-    await expect(page).toHaveURL(/\/dashboard$/);
-    await expect(page.getByRole('heading', { name: 'Hi, Ada' })).toBeVisible();
+  await test.step('kayıt ol', async () => {
+    await page.goto('/kayit');
+    await page.getByLabel('Ad soyad').fill('Ada Lovelace');
+    await page.getByLabel('E-posta').fill(email);
+    await page.getByLabel('Şifre').fill(PASSWORD);
+    await page.getByRole('button', { name: 'Hesap oluştur' }).click();
+    await expect(page).toHaveURL(/\/panel$/);
+    await expect(page.getByRole('heading', { name: 'Merhaba, Ada' })).toBeVisible();
   });
 
-  await test.step('log out and log back in', async () => {
-    await page.getByRole('button', { name: /Account menu/ }).click();
-    await page.getByRole('menuitem', { name: 'Log out' }).click();
-    await expect(page).toHaveURL(/\/login$/);
+  await test.step('çıkış yap ve tekrar giriş yap', async () => {
+    await page.getByRole('button', { name: /hesap menüsü/ }).click();
+    await page.getByRole('menuitem', { name: 'Çıkış yap' }).click();
+    await expect(page).toHaveURL(/\/giris$/);
     await login(page, email);
   });
 
-  await test.step('create a form', async () => {
-    await page.getByRole('main').getByRole('link', { name: 'New form' }).first().click();
-    await page.getByLabel('Title').fill('Event feedback');
-    await page.getByRole('button', { name: 'Create and add fields' }).click();
-    await expect(page).toHaveURL(/\/forms\/[a-f0-9]{24}$/);
+  await test.step('form oluştur', async () => {
+    await page.getByRole('main').getByRole('link', { name: 'Yeni form' }).first().click();
+    await page.getByLabel('Başlık').fill('Etkinlik geri bildirimi');
+    await page.getByRole('button', { name: 'Oluştur ve alan ekle' }).click();
+    await expect(page).toHaveURL(/\/formlar\/[a-f0-9]{24}$/);
   });
 
-  await test.step('add and configure fields', async () => {
-    const palette = page.getByRole('region', { name: 'Add a field' });
+  await test.step('alanları ekle ve düzenle', async () => {
+    const palette = page.getByRole('region', { name: 'Alan ekle' });
 
-    await palette.getByRole('button', { name: 'Short text' }).click();
-    await page.getByLabel('Question').fill('Your name');
-    await page.getByRole('checkbox', { name: 'Required' }).check();
+    await palette.getByRole('button', { name: 'Kısa metin' }).click();
+    await page.getByLabel('Soru').fill('Adın');
+    await page.getByRole('checkbox', { name: 'Zorunlu' }).check();
 
-    await palette.getByRole('button', { name: 'Email' }).click();
-    await page.getByLabel('Question').fill('Email');
-    await page.getByRole('checkbox', { name: 'Required' }).check();
+    await palette.getByRole('button', { name: 'E-posta' }).click();
+    await page.getByLabel('Soru').fill('E-posta');
+    await page.getByRole('checkbox', { name: 'Zorunlu' }).check();
 
-    await palette.getByRole('button', { name: 'Checkboxes' }).click();
-    await page.getByLabel('Question').fill('What did you enjoy?');
-    await page.getByRole('textbox', { name: 'Option 1' }).fill('Talks');
-    await page.getByRole('textbox', { name: 'Option 2' }).fill('Workshops');
+    await palette.getByRole('button', { name: 'Çoklu seçim' }).click();
+    await page.getByLabel('Soru').fill('Neleri beğendin?');
+    await page.getByRole('textbox', { name: 'Seçenek 1' }).fill('Konuşmalar');
+    await page.getByRole('textbox', { name: 'Seçenek 2' }).fill('Atölyeler');
   });
 
-  await test.step('reorder with the keyboard', async () => {
-    const handle = page.getByRole('button', { name: 'Reorder What did you enjoy?' });
+  await test.step('klavyeyle sırala', async () => {
+    const handle = page.getByRole('button', { name: 'Neleri beğendin? alanını sırala' });
     await handle.focus();
     for (const key of ['Space', 'ArrowUp', 'Space']) {
       await page.keyboard.press(key);
       await page.waitForTimeout(250);
     }
 
-    const labels = page.getByRole('list', { name: 'Form fields' }).locator(':scope > li');
-    await expect(labels.nth(1)).toContainText('What did you enjoy?');
-    await expect(labels.nth(2)).toContainText('Email');
+    const fields = page.getByRole('list', { name: 'Form alanları' }).locator(':scope > li');
+    await expect(fields.nth(1)).toContainText('Neleri beğendin?');
+    await expect(fields.nth(2)).toContainText('E-posta');
   });
 
-  await test.step('save', async () => {
-    await expect(page.getByText('Unsaved changes')).toBeVisible();
-    await page.getByRole('button', { name: /^Save/ }).click();
-    await expect(page.getByText('All changes saved')).toBeVisible();
+  await test.step('kaydet', async () => {
+    await expect(page.getByText('Kaydedilmemiş değişiklikler var')).toBeVisible();
+    await page.getByRole('button', { name: /^Kaydet/ }).click();
+    await expect(page.getByText('Tüm değişiklikler kaydedildi')).toBeVisible();
   });
 
-  const tabs = page.getByRole('navigation', { name: 'Form sections' });
+  const tabs = page.getByRole('navigation', { name: 'Form bölümleri' });
 
-  await test.step('configure form settings', async () => {
-    await tabs.getByRole('link', { name: 'Settings' }).click();
-    await page.getByLabel('Submit button label').fill('Send feedback');
-    await page.getByRole('button', { name: 'Save settings' }).click();
-    await expect(page.getByText('Settings saved.')).toBeVisible();
+  await test.step('form ayarlarını düzenle', async () => {
+    await tabs.getByRole('link', { name: 'Ayarlar' }).click();
+    await page.getByLabel('Gönder butonu metni').fill('Geri bildirimi gönder');
+    await page.getByRole('button', { name: 'Ayarları kaydet' }).click();
+    await expect(page.getByText('Ayarlar kaydedildi.')).toBeVisible();
   });
 
-  await test.step('publish', async () => {
-    await tabs.getByRole('link', { name: 'Build' }).click();
-    await page.getByRole('button', { name: 'Publish' }).click();
-    await expect(page.getByText('Your form is live.')).toBeVisible();
+  await test.step('yayınla', async () => {
+    await tabs.getByRole('link', { name: 'Oluştur' }).click();
+    await page.getByRole('button', { name: 'Yayınla' }).click();
+    await expect(page.getByText('Formun yayında.')).toBeVisible();
   });
 
   const slug = (
@@ -93,45 +93,50 @@ test('owner builds, publishes and reviews a form end to end', async ({
     .replace('/f/', '')
     .trim();
 
-  await test.step('respond as a visitor', async () => {
+  await test.step('ziyaretçi olarak yanıt gönder', async () => {
     const context = await browser.newContext({ baseURL });
     const visitor = await context.newPage();
     await visitor.goto(`/f/${slug}`);
-    await expect(visitor.getByRole('heading', { level: 1, name: 'Event feedback' })).toBeVisible();
+    await expect(
+      visitor.getByRole('heading', { level: 1, name: 'Etkinlik geri bildirimi' }),
+    ).toBeVisible();
 
-    await visitor.getByRole('button', { name: 'Send feedback' }).click();
-    await expect(visitor.getByText('This field is required.').first()).toBeVisible();
-    await expect(visitor.getByLabel('Your name')).toBeFocused();
+    await visitor.getByRole('button', { name: 'Geri bildirimi gönder' }).click();
+    await expect(visitor.getByText('Bu alan zorunludur.').first()).toBeVisible();
+    await expect(visitor.getByLabel('Adın')).toBeFocused();
 
-    await visitor.getByLabel('Your name').fill('Grace Hopper');
-    await visitor.getByLabel('Email').fill('grace@example.com');
-    await visitor.getByLabel('Workshops').check();
-    await visitor.getByRole('button', { name: 'Send feedback' }).click();
-    await expect(visitor.getByRole('heading', { name: 'Response sent' })).toBeVisible();
+    await visitor.getByLabel('Adın').fill('Grace Hopper');
+    await visitor.getByLabel('E-posta').fill('grace@example.com');
+    await visitor.getByLabel('Atölyeler').check();
+    await visitor.getByRole('button', { name: 'Geri bildirimi gönder' }).click();
+    await expect(visitor.getByRole('heading', { name: 'Yanıtın gönderildi' })).toBeVisible();
     await context.close();
   });
 
-  await test.step('view the response', async () => {
-    await tabs.getByRole('link', { name: 'Responses' }).click();
-    await expect(page.getByText('1 response')).toBeVisible();
-    await page.getByRole('link', { name: /^View/ }).first().click();
-    await expect(page).toHaveURL(/\/responses\/[a-f0-9]{24}$/);
+  await test.step('yanıtı görüntüle', async () => {
+    await tabs.getByRole('link', { name: 'Yanıtlar' }).click();
+    await expect(page.getByText('1 yanıt')).toBeVisible();
+    await page
+      .getByRole('link', { name: /^Görüntüle/ })
+      .first()
+      .click();
+    await expect(page).toHaveURL(/\/yanitlar\/[a-f0-9]{24}$/);
     const detail = page.getByRole('article');
     await expect(detail.getByText('Grace Hopper')).toBeVisible();
-    await expect(detail.getByText('Workshops')).toBeVisible();
+    await expect(detail.getByText('Atölyeler')).toBeVisible();
   });
 
-  await test.step('export CSV', async () => {
-    await page.getByRole('link', { name: 'All responses' }).click();
+  await test.step('CSV indir', async () => {
+    await page.getByRole('link', { name: 'Tüm yanıtlar' }).click();
     const [download] = await Promise.all([
       page.waitForEvent('download'),
-      page.getByRole('link', { name: 'Export CSV' }).click(),
+      page.getByRole('link', { name: 'CSV indir' }).click(),
     ]);
     expect(download.suggestedFilename()).toMatch(
-      new RegExp(`^${slug}-responses-\\d{4}-\\d{2}-\\d{2}\\.csv$`),
+      new RegExp(`^${slug}-yanitlar-\\d{4}-\\d{2}-\\d{2}\\.csv$`),
     );
     const csv = await readFile(await download.path(), 'utf8');
-    expect(csv).toContain('"Your name","What did you enjoy?","Email"');
-    expect(csv).toContain('"Grace Hopper","Workshops","grace@example.com"');
+    expect(csv).toContain('"Adın","Neleri beğendin?","E-posta"');
+    expect(csv).toContain('"Grace Hopper","Atölyeler","grace@example.com"');
   });
 });

@@ -7,11 +7,11 @@ export function proxy(request) {
   if (hasSession) return NextResponse.next();
 
   const { pathname, search } = request.nextUrl;
-  const url = new URL('/login', request.url);
+  const url = new URL('/giris', request.url);
   url.searchParams.set('next', `${pathname}${search}`);
   return NextResponse.redirect(url);
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/forms/:path*', '/settings/:path*'],
+  matcher: ['/panel/:path*', '/formlar/:path*', '/ayarlar/:path*'],
 };

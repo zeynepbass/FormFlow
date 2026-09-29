@@ -37,10 +37,10 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
       <FormStatus error={formError} />
-      <Field id="email" label="Email" error={errors.email?.message}>
+      <Field id="email" label="E-posta" error={errors.email?.message}>
         {(props) => <Input type="email" autoComplete="email" {...props} {...register('email')} />}
       </Field>
-      <Field id="password" label="Password" error={errors.password?.message}>
+      <Field id="password" label="Şifre" error={errors.password?.message}>
         {(props) => (
           <Input
             type="password"
@@ -52,14 +52,14 @@ export function LoginForm() {
       </Field>
       <div className="flex justify-end">
         <Link
-          href="/forgot-password"
+          href="/sifremi-unuttum"
           className="text-sm font-medium text-primary-dark hover:underline"
         >
-          Forgot password?
+          Şifreni mi unuttun?
         </Link>
       </div>
-      <SubmitButton pending={isSubmitting} pendingText="Signing in…" className="w-full">
-        Log in
+      <SubmitButton pending={isSubmitting} pendingText="Giriş yapılıyor…" className="w-full">
+        Giriş yap
       </SubmitButton>
     </form>
   );

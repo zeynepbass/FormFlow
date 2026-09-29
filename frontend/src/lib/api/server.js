@@ -12,7 +12,7 @@ export async function serverApi(path) {
     cache: 'no-store',
   });
 
-  if (response.status === 401) redirect('/login');
+  if (response.status === 401) redirect('/giris');
 
   const payload = await response.json().catch(() => null);
   if (!response.ok) throw new ApiError(response.status, payload?.error);

@@ -7,7 +7,7 @@ import { siteConfig } from '@/config/site';
 import { highlights, steps } from '@/features/marketing/content';
 import { pageMetadata } from '@/lib/metadata';
 
-const homeTitle = `${siteConfig.name} — Simple form builder for small teams`;
+const homeTitle = `${siteConfig.name} — Küçük ekipler için sade form oluşturucu`;
 
 export const metadata = {
   ...pageMetadata({ description: siteConfig.description, path: '/', socialTitle: homeTitle }),
@@ -41,25 +41,27 @@ export default function HomePage() {
       <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-16 pb-20 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:pt-24">
         <div className="max-w-xl">
           <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-            Create forms. Collect responses.{' '}
-            <span className="text-primary-dark">Understand your data.</span>
+            Form oluştur. Yanıtları topla. <span className="text-primary-dark">Verini anla.</span>
           </h1>
           <p className="mt-5 text-lg text-muted-strong">{siteConfig.description}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/register" className={buttonVariants({ size: 'lg' })}>
-              Create your first form
+            <Link href="/kayit" className={buttonVariants({ size: 'lg' })}>
+              İlk formunu oluştur
               <ArrowRight aria-hidden="true" />
             </Link>
-            <Link href="/features" className={buttonVariants({ variant: 'secondary', size: 'lg' })}>
-              See features
+            <Link
+              href="/ozellikler"
+              className={buttonVariants({ variant: 'secondary', size: 'lg' })}
+            >
+              Özellikleri gör
             </Link>
           </div>
-          <p className="mt-4 text-sm text-muted-strong">Free to use. No credit card, no setup.</p>
+          <p className="mt-4 text-sm text-muted-strong">Ücretsiz. Kredi kartı yok, kurulum yok.</p>
         </div>
 
         <Image
           src="/assets/illustrations/hero-builder.svg"
-          alt="The FormFlow builder with a field list, a form preview and a response chart"
+          alt="Alan listesi, form önizlemesi ve yanıt grafiği içeren FormFlow form oluşturucu"
           width={640}
           height={440}
           priority
@@ -70,11 +72,10 @@ export default function HomePage() {
       <section aria-labelledby="highlights-heading" className="border-y border-border bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <h2 id="highlights-heading" className="text-3xl font-semibold tracking-tight">
-            Everything a form needs. Nothing it doesn&apos;t.
+            Bir formun ihtiyacı olan her şey. Fazlası değil.
           </h2>
           <p className="mt-3 max-w-2xl text-muted-strong">
-            FormFlow covers the whole loop, from the first field to the final spreadsheet, and stays
-            out of your way.
+            FormFlow ilk alandan son tabloya kadar tüm süreci kapsar ve işini zorlaştırmaz.
           </p>
           <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {highlights.map(({ icon: Icon, title, body }) => (
@@ -92,12 +93,12 @@ export default function HomePage() {
 
       <section aria-labelledby="steps-heading" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <h2 id="steps-heading" className="text-3xl font-semibold tracking-tight">
-          From idea to insight in three steps
+          Üç adımda fikirden içgörüye
         </h2>
         <ol className="mt-10 grid gap-6 md:grid-cols-3">
           {steps.map((step, index) => (
             <li key={step.title} className="rounded-lg border border-border bg-surface p-6">
-              <span className="text-sm font-semibold text-primary-dark">Step {index + 1}</span>
+              <span className="text-sm font-semibold text-primary-dark">Adım {index + 1}</span>
               <h3 className="mt-2 text-lg font-semibold">{step.title}</h3>
               <p className="mt-2 text-sm text-muted-strong">{step.body}</p>
             </li>
@@ -108,13 +109,13 @@ export default function HomePage() {
       <section aria-labelledby="cta-heading" className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
         <div className="rounded-lg bg-foreground px-6 py-12 text-center sm:px-12">
           <h2 id="cta-heading" className="text-2xl font-semibold text-surface sm:text-3xl">
-            Your next form is a few minutes away
+            Yeni formun birkaç dakika uzağında
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-border">
-            Sign up, add a few fields and share the link today.
+            Kayıt ol, birkaç alan ekle ve bağlantıyı bugün paylaş.
           </p>
-          <Link href="/register" className={buttonVariants({ size: 'lg', className: 'mt-8' })}>
-            Get started
+          <Link href="/kayit" className={buttonVariants({ size: 'lg', className: 'mt-8' })}>
+            Ücretsiz başla
           </Link>
         </div>
       </section>

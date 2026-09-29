@@ -135,7 +135,7 @@ describe('input hardening', () => {
   it('does not leak internals on unexpected input', async () => {
     const { agent } = await signUp(ctx.app);
     const res = await agent.get('/api/forms/zzzzzzzzzzzzzzzzzzzzzzzz').expect(404);
-    expect(res.body).toEqual({ error: { code: 'NOT_FOUND', message: 'Not found.' } });
+    expect(res.body).toEqual({ error: { code: 'NOT_FOUND', message: 'Bulunamadı.' } });
   });
 });
 

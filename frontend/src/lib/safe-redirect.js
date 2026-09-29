@@ -1,4 +1,4 @@
-export function safeRedirectPath(value, fallback = '/dashboard') {
+export function safeRedirectPath(value, fallback = '/panel') {
   if (typeof value !== 'string' || !value.startsWith('/') || value.startsWith('//')) {
     return fallback;
   }

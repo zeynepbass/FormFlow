@@ -3,9 +3,9 @@ import { isProduction } from '../../config/env.js';
 import { AppError } from '../errors/app-error.js';
 
 const MULTER_MESSAGES = {
-  LIMIT_FILE_SIZE: [413, 'PAYLOAD_TOO_LARGE', 'Files must be 5 MB or smaller.'],
-  LIMIT_FILE_COUNT: [400, 'VALIDATION_ERROR', 'Too many files.'],
-  LIMIT_UNEXPECTED_FILE: [400, 'VALIDATION_ERROR', 'Unexpected file field.'],
+  LIMIT_FILE_SIZE: [413, 'PAYLOAD_TOO_LARGE', 'Dosyalar en fazla 5 MB olmalı.'],
+  LIMIT_FILE_COUNT: [400, 'VALIDATION_ERROR', 'Çok fazla dosya gönderildi.'],
+  LIMIT_UNEXPECTED_FILE: [400, 'VALIDATION_ERROR', 'Beklenmeyen dosya alanı.'],
 };
 
 function toAppError(error) {
@@ -15,16 +15,16 @@ function toAppError(error) {
     const [status, code, message] = MULTER_MESSAGES[error.code] ?? [
       400,
       'VALIDATION_ERROR',
-      'The upload could not be processed.',
+      'Yükleme işlenemedi.',
     ];
     return new AppError(status, code, message);
   }
 
   if (error.type === 'entity.parse.failed') {
-    return new AppError(400, 'VALIDATION_ERROR', 'The request body is not valid JSON.');
+    return new AppError(400, 'VALIDATION_ERROR', 'İstek gövdesi geçerli bir JSON değil.');
   }
   if (error.type === 'entity.too.large') {
-    return new AppError(413, 'PAYLOAD_TOO_LARGE', 'The request body is too large.');
+    return new AppError(413, 'PAYLOAD_TOO_LARGE', 'İstek gövdesi çok büyük.');
   }
 
   return null;
@@ -48,12 +48,12 @@ export function errorHandler(error, req, res, _next) {
   res.status(500).json({
     error: {
       code: 'INTERNAL_ERROR',
-      message: 'Something went wrong. Please try again.',
+      message: 'Bir şeyler ters gitti. Lütfen tekrar dene.',
       ...(isProduction ? {} : { debug: error.message }),
     },
   });
 }
 
 export function notFoundHandler(req, res) {
-  res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Not found.' } });
+  res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Bulunamadı.' } });
 }

@@ -13,17 +13,17 @@ import {
 } from 'lucide-react';
 
 export const FIELD_TYPE_OPTIONS = [
-  { type: 'short_text', label: 'Short text', icon: Type },
-  { type: 'long_text', label: 'Long text', icon: AlignLeft },
-  { type: 'email', label: 'Email', icon: AtSign },
-  { type: 'number', label: 'Number', icon: Hash },
-  { type: 'phone', label: 'Phone', icon: Phone },
+  { type: 'short_text', label: 'Kısa metin', icon: Type },
+  { type: 'long_text', label: 'Uzun metin', icon: AlignLeft },
+  { type: 'email', label: 'E-posta', icon: AtSign },
+  { type: 'number', label: 'Sayı', icon: Hash },
+  { type: 'phone', label: 'Telefon', icon: Phone },
   { type: 'url', label: 'URL', icon: Link },
-  { type: 'select', label: 'Dropdown', icon: SquareChevronDown },
-  { type: 'radio', label: 'Single choice', icon: CircleDot },
-  { type: 'checkbox', label: 'Checkboxes', icon: SquareCheck },
-  { type: 'date', label: 'Date', icon: Calendar },
-  { type: 'file', label: 'File upload', icon: Upload },
+  { type: 'select', label: 'Açılır liste', icon: SquareChevronDown },
+  { type: 'radio', label: 'Tek seçim', icon: CircleDot },
+  { type: 'checkbox', label: 'Çoklu seçim', icon: SquareCheck },
+  { type: 'date', label: 'Tarih', icon: Calendar },
+  { type: 'file', label: 'Dosya yükleme', icon: Upload },
 ];
 
 export const FIELD_TYPE_MAP = Object.fromEntries(

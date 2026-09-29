@@ -13,7 +13,7 @@ function limiter({ windowMs, limit, keyGenerator, message }) {
       res.status(429).json({
         error: {
           code: 'RATE_LIMITED',
-          message: message ?? 'Too many requests. Please wait a moment and try again.',
+          message: message ?? 'Çok fazla istek gönderildi. Biraz bekleyip tekrar dene.',
         },
       });
     },
@@ -34,13 +34,13 @@ export function createRateLimiters() {
       windowMs: 15 * MINUTE,
       limit: 10,
       keyGenerator: ipKey,
-      message: 'Too many sign-in attempts. Please try again in a few minutes.',
+      message: 'Çok fazla giriş denemesi yapıldı. Birkaç dakika sonra tekrar dene.',
     }),
     loginByEmail: limiter({
       windowMs: 15 * MINUTE,
       limit: 5,
       keyGenerator: emailKey,
-      message: 'Too many sign-in attempts. Please try again in a few minutes.',
+      message: 'Çok fazla giriş denemesi yapıldı. Birkaç dakika sonra tekrar dene.',
     }),
     register: limiter({ windowMs: 60 * MINUTE, limit: 5, keyGenerator: ipKey }),
     passwordReset: limiter({ windowMs: 60 * MINUTE, limit: 5, keyGenerator: ipKey }),
@@ -48,7 +48,7 @@ export function createRateLimiters() {
       windowMs: MINUTE,
       limit: 10,
       keyGenerator: (req) => `${ipKey(req)}:${req.params.slug}`,
-      message: 'Too many submissions. Please wait a minute and try again.',
+      message: 'Çok fazla gönderim yapıldı. Bir dakika bekleyip tekrar dene.',
     }),
     submitPerIp: limiter({ windowMs: 60 * MINUTE, limit: 100, keyGenerator: ipKey }),
     events: limiter({ windowMs: MINUTE, limit: 60, keyGenerator: ipKey }),

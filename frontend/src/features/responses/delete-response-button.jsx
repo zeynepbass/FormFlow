@@ -19,7 +19,7 @@ export function DeleteResponseButton({ formId, responseId }) {
     try {
       await api(`/forms/${formId}/responses/${responseId}`, { method: 'DELETE' });
       setOpen(false);
-      router.push(`/forms/${formId}/responses`);
+      router.push(`/formlar/${formId}/yanitlar`);
       router.refresh();
     } catch (err) {
       setError(err.message);
@@ -36,14 +36,14 @@ export function DeleteResponseButton({ formId, responseId }) {
       ) : null}
       <Button variant="secondary" onClick={() => setOpen(true)}>
         <Trash2 aria-hidden="true" />
-        Delete
+        Sil
       </Button>
       <ConfirmDialog
         open={open}
         onOpenChange={setOpen}
-        title="Delete this response?"
-        description="The response and any uploaded files will be permanently deleted."
-        confirmLabel="Delete response"
+        title="Bu yanıt silinsin mi?"
+        description="Yanıt ve yüklenen dosyalar kalıcı olarak silinecek."
+        confirmLabel="Yanıtı sil"
         pending={pending}
         onConfirm={remove}
       />

@@ -17,16 +17,16 @@ describe('auth schemas', () => {
     });
     expect(result.data).toEqual({ name: 'Ada', email: 'ada@example.com', password: 'long enough' });
     expect(messages(registerSchema, { name: ' ', email: 'x', password: 'short' })).toEqual({
-      name: 'Enter your name.',
-      email: 'Enter a valid email address.',
-      password: 'Use at least 8 characters.',
+      name: 'Adını gir.',
+      email: 'Geçerli bir e-posta adresi gir.',
+      password: 'En az 8 karakter kullan.',
     });
   });
 
   it('requires both login fields', () => {
     expect(messages(loginSchema, { email: '', password: '' })).toEqual({
-      email: 'Enter your email address.',
-      password: 'Enter your password.',
+      email: 'E-posta adresini gir.',
+      password: 'Şifreni gir.',
     });
   });
 
@@ -34,7 +34,7 @@ describe('auth schemas', () => {
     expect(
       messages(resetPasswordSchema, { password: 'long enough', confirmPassword: 'different' }),
     ).toEqual({
-      confirmPassword: 'Passwords do not match.',
+      confirmPassword: 'Şifreler eşleşmiyor.',
     });
   });
 });

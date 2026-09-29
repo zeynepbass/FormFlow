@@ -8,6 +8,7 @@ export function pageMetadata({ title, description, path, socialTitle: customTitl
     alternates: { canonical: path },
     openGraph: {
       type: 'website',
+      locale: siteConfig.locale,
       siteName: siteConfig.name,
       url: path,
       title: socialTitle,

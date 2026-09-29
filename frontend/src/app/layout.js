@@ -19,7 +19,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     siteName: siteConfig.name,
-    locale: 'en_US',
+    locale: siteConfig.locale,
     images: [{ url: siteConfig.ogImage, width: 1200, height: 630, alt: siteConfig.tagline }],
   },
   twitter: {
@@ -36,13 +36,13 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={instrumentSans.variable}>
+    <html lang="tr" className={instrumentSans.variable}>
       <body>
         <a
           href="#main"
           className="sr-only z-50 rounded-md bg-surface px-4 py-2 text-sm font-medium focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
         >
-          Skip to content
+          İçeriğe geç
         </a>
         {children}
       </body>

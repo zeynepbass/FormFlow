@@ -6,6 +6,7 @@ import { useRef, useState, useTransition } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { CURSOR_PARAM, DIRECTION_PARAM, FILTER_PARAMS } from './url-params';
 
 const SEARCH_DELAY = 300;
 
@@ -14,19 +15,19 @@ export function ResponseFilters({ formId }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
-  const [query, setQuery] = useState(searchParams.get('q') ?? '');
+  const [query, setQuery] = useState(searchParams.get(FILTER_PARAMS.q) ?? '');
   const timer = useRef();
 
-  const from = searchParams.get('from') ?? '';
-  const to = searchParams.get('to') ?? '';
+  const from = searchParams.get(FILTER_PARAMS.from) ?? '';
+  const to = searchParams.get(FILTER_PARAMS.to) ?? '';
 
   function update(changes) {
     const params = new URLSearchParams(searchParams);
-    params.delete('cursor');
-    params.delete('dir');
+    params.delete(CURSOR_PARAM);
+    params.delete(DIRECTION_PARAM);
     for (const [key, value] of Object.entries(changes)) {
-      if (value) params.set(key, value);
-      else params.delete(key);
+      if (value) params.set(FILTER_PARAMS[key], value);
+      else params.delete(FILTER_PARAMS[key]);
     }
     const search = params.toString();
     startTransition(() =>
@@ -41,8 +42,8 @@ export function ResponseFilters({ formId }) {
   }
 
   const exportParams = new URLSearchParams();
-  for (const key of ['q', 'from', 'to']) {
-    const value = searchParams.get(key);
+  for (const [key, param] of Object.entries(FILTER_PARAMS)) {
+    const value = searchParams.get(param);
     if (value) exportParams.set(key, value);
   }
   const exportQuery = exportParams.toString();
@@ -51,12 +52,12 @@ export function ResponseFilters({ formId }) {
   return (
     <div
       role="search"
-      aria-label="Filter responses"
+      aria-label="Yanıtları filtrele"
       aria-busy={isPending}
       className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_10rem_10rem_auto_auto] lg:items-end"
     >
       <div className="space-y-1.5 sm:col-span-2 lg:col-span-1">
-        <Label htmlFor="response-search">Search</Label>
+        <Label htmlFor="response-search">Ara</Label>
         <div className="relative">
           <Search
             className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-strong"
@@ -66,7 +67,7 @@ export function ResponseFilters({ formId }) {
             id="response-search"
             type="search"
             className="pl-9"
-            placeholder="Search answers"
+            placeholder="Yanıtlarda ara"
             value={query}
             maxLength={100}
             onChange={(event) => onSearch(event.target.value)}
@@ -74,7 +75,7 @@ export function ResponseFilters({ formId }) {
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="response-from">From</Label>
+        <Label htmlFor="response-from">Başlangıç</Label>
         <Input
           id="response-from"
           type="date"
@@ -84,7 +85,7 @@ export function ResponseFilters({ formId }) {
         />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="response-to">To</Label>
+        <Label htmlFor="response-to">Bitiş</Label>
         <Input
           id="response-to"
           type="date"
@@ -104,7 +105,7 @@ export function ResponseFilters({ formId }) {
         }}
       >
         <X aria-hidden="true" />
-        Clear
+        Temizle
       </Button>
       <a
         href={`/api/forms/${formId}/export${exportQuery ? `?${exportQuery}` : ''}`}
@@ -112,7 +113,7 @@ export function ResponseFilters({ formId }) {
         className={buttonVariants({ variant: 'secondary', className: 'h-11' })}
       >
         <Download aria-hidden="true" />
-        Export CSV
+        CSV indir
       </a>
     </div>
   );

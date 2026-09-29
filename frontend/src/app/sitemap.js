@@ -2,8 +2,8 @@ import { siteConfig } from '@/config/site';
 
 const routes = [
   { path: '', priority: 1, changeFrequency: 'monthly' },
-  { path: '/features', priority: 0.8, changeFrequency: 'monthly' },
-  { path: '/about', priority: 0.5, changeFrequency: 'yearly' },
+  { path: '/ozellikler', priority: 0.8, changeFrequency: 'monthly' },
+  { path: '/hakkinda', priority: 0.5, changeFrequency: 'yearly' },
 ];
 
 export default function sitemap() {

@@ -6,7 +6,7 @@ const PAD = { top: 12, right: 8, bottom: 28, left: 36 };
 const GAP = 2;
 const RADIUS = 4;
 
-const dayFormatter = new Intl.DateTimeFormat('en', {
+const dayFormatter = new Intl.DateTimeFormat('tr-TR', {
   month: 'short',
   day: 'numeric',
   timeZone: 'UTC',
@@ -43,7 +43,7 @@ export function DailyChart({ daily }) {
       aria-labelledby="daily-chart-title"
     >
       <title id="daily-chart-title">
-        {`Daily submissions from ${formatDay(daily[0].date)} to ${formatDay(daily.at(-1).date)}`}
+        {`${formatDay(daily[0].date)} – ${formatDay(daily.at(-1).date)} arası günlük gönderimler`}
       </title>
 
       {ticks.map((tick) => {
@@ -84,7 +84,7 @@ export function DailyChart({ daily }) {
               height={plotHeight}
               fill="transparent"
             >
-              <title>{`${formatDay(point.date)}: ${formatNumber(point.submissions)} submissions`}</title>
+              <title>{`${formatDay(point.date)}: ${formatNumber(point.submissions)} gönderim`}</title>
             </rect>
             {height > 0 ? (
               <path
@@ -113,24 +113,24 @@ export function DailyTable({ daily }) {
   return (
     <details className="mt-4">
       <summary className="cursor-pointer text-sm font-medium text-primary-dark">
-        Show data table
+        Veri tablosunu göster
       </summary>
       <div className="mt-3 max-h-80 overflow-auto rounded-md border border-border">
         <table className="w-full text-sm tabular-nums">
-          <caption className="sr-only">Daily views, starts and submissions</caption>
+          <caption className="sr-only">Günlük görüntülenme, başlama ve gönderim sayıları</caption>
           <thead className="sticky top-0 bg-surface text-left text-muted-strong">
             <tr>
               <th scope="col" className="px-3 py-2 font-medium">
-                Date
+                Tarih
               </th>
               <th scope="col" className="px-3 py-2 text-right font-medium">
-                Views
+                Görüntülenme
               </th>
               <th scope="col" className="px-3 py-2 text-right font-medium">
-                Starts
+                Başlama
               </th>
               <th scope="col" className="px-3 py-2 text-right font-medium">
-                Submissions
+                Gönderim
               </th>
             </tr>
           </thead>
