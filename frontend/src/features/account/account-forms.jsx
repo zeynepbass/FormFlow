@@ -1,0 +1,228 @@
+'use client';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod/mini';
+import { ConfirmDialog } from '@/components/common/confirm-dialog';
+import { FormStatus } from '@/components/common/form-status';
+import { SubmitButton } from '@/components/common/submit-button';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Field } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { newPassword, passwordsMatch } from '@/features/auth/schemas';
+import { api, applyFieldErrors } from '@/lib/api/client';
+import { requiredText } from '@/lib/validation';
+
+const profileSchema = z.object({ name: requiredText('Enter your name.', 80) });
+
+const passwordSchema = z
+  .object({
+    currentPassword: z.string().check(z.minLength(1, 'Enter your current password.')),
+    newPassword,
+    confirmPassword: z.string(),
+  })
+  .check(passwordsMatch('newPassword'));
+
+function Section({ id, title, description, children }) {
+  return (
+    <Card as="section" aria-labelledby={id} className="p-6">
+      <h2 id={id} className="text-lg font-semibold">
+        {title}
+      </h2>
+      {description ? <p className="mt-1 text-sm text-muted-strong">{description}</p> : null}
+      <div className="mt-5">{children}</div>
+    </Card>
+  );
+}
+
+export function ProfileForm({ user }) {
+  const router = useRouter();
+  const [status, setStatus] = useState({ error: '', success: '' });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting, isDirty },
+  } = useForm({ resolver: zodResolver(profileSchema), defaultValues: { name: user.name } });
+
+  async function onSubmit(values) {
+    try {
+      const { data } = await api('/users/me', { method: 'PATCH', body: values });
+      reset({ name: data.name });
+      setStatus({ error: '', success: 'Profile updated.' });
+      router.refresh();
+    } catch (error) {
+      setStatus({ error: error.message, success: '' });
+    }
+  }
+
+  return (
+    <Section id="profile-heading" title="Profile">
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+        <FormStatus {...status} />
+        <Field id="name" label="Name" error={errors.name?.message}>
+          {(props) => <Input autoComplete="name" {...props} {...register('name')} />}
+        </Field>
+        <Field id="email" label="Email" description="Your email address cannot be changed yet.">
+          {(props) => <Input type="email" value={user.email} readOnly {...props} />}
+        </Field>
+        <SubmitButton
+          pending={isSubmitting}
+          disabled={!isDirty || isSubmitting}
+          pendingText="Saving…"
+        >
+          Save profile
+        </SubmitButton>
+      </form>
+    </Section>
+  );
+}
+
+export function PasswordForm() {
+  const [status, setStatus] = useState({ error: '', success: '' });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: { currentPassword: '', newPassword: '', confirmPassword: '' },
+  });
+
+  async function onSubmit({ currentPassword, newPassword: password }) {
+    setStatus({ error: '', success: '' });
+    try {
+      await api('/users/me/password', {
+        method: 'PATCH',
+        body: { currentPassword, newPassword: password },
+      });
+      reset();
+      setStatus({ error: '', success: 'Password changed. Other devices have been signed out.' });
+    } catch (error) {
+      if (!applyFieldErrors(error, setError, ['currentPassword', 'newPassword'])) {
+        setStatus({ error: error.message, success: '' });
+      }
+    }
+  }
+
+  return (
+    <Section
+      id="password-heading"
+      title="Password"
+      description="Changing it signs you out on other devices."
+    >
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+        <FormStatus {...status} />
+        <Field
+          id="currentPassword"
+          label="Current password"
+          error={errors.currentPassword?.message}
+        >
+          {(props) => (
+            <Input
+              type="password"
+              autoComplete="current-password"
+              {...props}
+              {...register('currentPassword')}
+            />
+          )}
+        </Field>
+        <Field id="newPassword" label="New password" error={errors.newPassword?.message}>
+          {(props) => (
+            <Input
+              type="password"
+              autoComplete="new-password"
+              {...props}
+              {...register('newPassword')}
+            />
+          )}
+        </Field>
+        <Field
+          id="confirmPassword"
+          label="Confirm new password"
+          error={errors.confirmPassword?.message}
+        >
+          {(props) => (
+            <Input
+              type="password"
+              autoComplete="new-password"
+              {...props}
+              {...register('confirmPassword')}
+            />
+          )}
+        </Field>
+        <SubmitButton pending={isSubmitting} pendingText="Updating…">
+          Change password
+        </SubmitButton>
+      </form>
+    </Section>
+  );
+}
+
+export function DeleteAccount() {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [password, setPassword] = useState('');
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState('');
+
+  async function remove() {
+    setPending(true);
+    setError('');
+    try {
+      await api('/users/me', { method: 'DELETE', body: { password } });
+      router.replace('/');
+      router.refresh();
+    } catch (err) {
+      setError(err.message);
+      setPending(false);
+      setOpen(false);
+    }
+  }
+
+  return (
+    <Section
+      id="delete-heading"
+      title="Delete account"
+      description="Permanently delete your account, all forms, responses and uploaded files."
+    >
+      <form
+        className="space-y-5"
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (password) setOpen(true);
+        }}
+      >
+        <FormStatus error={error} />
+        <Field id="delete-password" label="Confirm with your password">
+          {(props) => (
+            <Input
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              {...props}
+            />
+          )}
+        </Field>
+        <Button type="submit" variant="danger" disabled={!password || pending}>
+          Delete my account
+        </Button>
+      </form>
+      <ConfirmDialog
+        open={open}
+        onOpenChange={setOpen}
+        title="Delete your account?"
+        description="This removes everything and cannot be undone."
+        confirmLabel="Delete account"
+        pending={pending}
+        onConfirm={remove}
+      />
+    </Section>
+  );
+}

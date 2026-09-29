@@ -1,0 +1,11 @@
+node_modules
+.next
+coverage
+playwright-report
+test-results
+package-lock.json
+backend/uploads
+backend/.data
+frontend/test-results
+frontend/playwright-report
+frontend/.next

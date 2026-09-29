@@ -1,0 +1,27 @@
+{
+  "name": "formflow",
+  "private": true,
+  "description": "Create forms. Collect responses. Understand your data.",
+  "license": "MIT",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "db": "npm run db -w backend",
+    "dev:api": "npm run dev -w backend",
+    "dev:web": "npm run dev -w frontend",
+    "lint": "npm run lint --workspaces",
+    "test": "npm run test --workspaces",
+    "build": "npm run build -w frontend",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.9.9",
+    "prettier-plugin-tailwindcss": "^0.8.1"
+  }
+}

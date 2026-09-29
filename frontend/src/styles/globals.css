@@ -1,0 +1,64 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-primary: #6d5dfb;
+  --color-primary-dark: #5848e8;
+  --color-primary-foreground: #ffffff;
+  --color-background: #f7f3ee;
+  --color-surface: #fffcf8;
+  --color-foreground: #211f2b;
+  --color-muted: #77727f;
+  --color-muted-strong: #68636f;
+  --color-border: #e8e1d9;
+  --color-soft-purple: #eeeafe;
+  --color-success: #16a34a;
+  --color-success-text: #15803d;
+  --color-error: #dc2626;
+  --color-error-text: #b91c1c;
+  --color-warning: #d97706;
+  --color-warning-text: #b45309;
+  --color-overlay: rgb(33 31 43 / 0.4);
+
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --shadow-card: 0 1px 2px rgb(33 31 43 / 0.04);
+  --shadow-popover: 0 8px 24px rgb(33 31 43 / 0.12);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-soft-purple);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
