@@ -1,54 +1,80 @@
 # FormFlow
 
-Create forms. Collect responses. Understand your data.
+Form oluştur. Yanıtları topla. Verini anla.
 
-![FormFlow form builder](docs/images/form-builder.png)
+FormFlow; serbest çalışanlar, içerik üreticileri ve küçük ekipler için sade bir form oluşturucu. Form hazırlanır, bağlantısı paylaşılır ve yanıtlar tek bir panelden takip edilir.
 
-## Overview
+![Ana sayfa](docs/images/home.png)
 
-FormFlow is a simple form builder for freelancers, creators and small teams. Build a form, share its link and follow the responses from one dashboard.
+## Özellikler
 
-## Features
+- 11 alan türüyle form oluşturma
+- Sürükle-bırak ve klavyeyle alan sıralama
+- Taslak, yayında, duraklatıldı ve arşivlendi durumları
+- Paylaşılabilir form bağlantısı
+- Arama ve tarih filtresiyle yanıt listesi
+- CSV dışa aktarma
+- Görüntülenme, gönderim ve tamamlama oranı
 
-- Form builder with 11 field types and drag and drop that also works with the keyboard
-- Draft, published, paused and archived states
-- Public form links such as `/f/contact-form`
-- Response list with search, date filter and detail view
-- CSV export
-- Views, starts, submissions and completion rate
-- Register, login, email verification and password reset
+## Ekran Görüntüleri
 
-## Tech Stack
+### Tanıtım sayfaları
 
-- **Frontend:** Next.js (App Router), React, Tailwind CSS, shadcn/ui, React Hook Form, Zod
+| Özellikler                              | Hakkında                           |
+| --------------------------------------- | ---------------------------------- |
+| ![Özellikler](docs/images/features.png) | ![Hakkında](docs/images/about.png) |
+
+### Hesap
+
+| Giriş                           | Kayıt                              | Şifremi unuttum                                     |
+| ------------------------------- | ---------------------------------- | --------------------------------------------------- |
+| ![Giriş](docs/images/login.png) | ![Kayıt](docs/images/register.png) | ![Şifremi unuttum](docs/images/forgot-password.png) |
+
+### Panel ve formlar
+
+| Panel                               | Formlar                           |
+| ----------------------------------- | --------------------------------- |
+| ![Panel](docs/images/dashboard.png) | ![Formlar](docs/images/forms.png) |
+
+| Yeni form                              | Hesap ayarları                                      |
+| -------------------------------------- | --------------------------------------------------- |
+| ![Yeni form](docs/images/new-form.png) | ![Hesap ayarları](docs/images/account-settings.png) |
+
+### Form oluşturucu
+
+![Form oluşturucu](docs/images/builder.png)
+
+![Form ayarları](docs/images/form-settings.png)
+
+### Yanıtlar ve analiz
+
+| Yanıt listesi                               | Yanıt detayı                                     |
+| ------------------------------------------- | ------------------------------------------------ |
+| ![Yanıt listesi](docs/images/responses.png) | ![Yanıt detayı](docs/images/response-detail.png) |
+
+![Analiz](docs/images/analytics.png)
+
+### Yayınlanan form
+
+![Yayınlanan form](docs/images/public-form.png)
+
+### Mobil
+
+| Yayınlanan form                       | Panel                                            |
+| ------------------------------------- | ------------------------------------------------ |
+| ![Mobil form](docs/images/mobile.png) | ![Mobil panel](docs/images/mobile-dashboard.png) |
+
+## Teknolojiler
+
+- **Frontend:** Next.js, React, Tailwind CSS, shadcn/ui, React Hook Form, Zod
 - **Backend:** Node.js, Express, MongoDB
-- **Testing:** Vitest, Supertest, Playwright
+- **Test:** Vitest, Supertest, Playwright
 
-## Architecture
+Mimari notları için: [docs/architecture.md](docs/architecture.md)
 
-```text
-Browser → Next.js → /api → Express → MongoDB
-```
+## Kurulum
 
-- Next.js forwards `/api` requests to Express, so the session is kept in an `HttpOnly` cookie.
-- Pages are Server Components by default. Client components are used only where interaction is needed.
-- Marketing pages are static and public forms are cached. Private pages are never cached.
-- Every request is authorized on the API, and users can only access their own forms.
-
-More details are in [docs/architecture.md](docs/architecture.md).
-
-## Project Structure
-
-```text
-formflow/
-├── backend/     Express API
-├── frontend/    Next.js app
-└── docs/        Architecture notes
-```
-
-## Getting Started
-
-Requires Node.js 22.12 or newer.
+Node.js 22.12 veya üzeri gerekir.
 
 ```bash
 git clone https://github.com/zeynepbass/formflow.git
@@ -58,7 +84,7 @@ cp .env.example backend/.env
 cp .env.example frontend/.env.local
 ```
 
-Set `AUTH_SECRET` and `REVALIDATE_SECRET`, then run each command in its own terminal:
+`AUTH_SECRET` ve `REVALIDATE_SECRET` değerlerini doldur, ardından her komutu ayrı bir terminalde çalıştır:
 
 ```bash
 npm run db
@@ -66,35 +92,16 @@ npm run dev:api
 npm run dev:web
 ```
 
-`npm run db` starts a local MongoDB. Skip it if you already have one.
+Uygulama http://localhost:3000 adresinde açılır.
 
-Open http://localhost:3000.
-
-## Environment Variables
-
-| Variable              | Description                           |
-| --------------------- | ------------------------------------- |
-| `NEXT_PUBLIC_APP_URL` | Web app URL                           |
-| `API_INTERNAL_URL`    | API URL used by Next.js               |
-| `REVALIDATE_SECRET`   | Shared secret between the API and web |
-| `PORT`                | API port                              |
-| `NODE_ENV`            | `development` or `production`         |
-| `MONGODB_URI`         | MongoDB connection string             |
-| `AUTH_SECRET`         | Secret for session tokens (32+ chars) |
-| `CORS_ORIGIN`         | Allowed web origin                    |
-| `APP_URL`             | Web app URL used in emails            |
-| `UPLOAD_DIR`          | Folder for uploaded files             |
-| `TRUST_PROXY`         | Number of trusted proxies             |
-
-## Testing
+## Testler
 
 ```bash
 npm run lint
 npm test
-npm run build
 npm run test:e2e -w frontend
 ```
 
-## License
+## Lisans
 
 [MIT](LICENSE)

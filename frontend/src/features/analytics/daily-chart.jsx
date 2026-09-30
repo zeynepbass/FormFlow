@@ -38,7 +38,7 @@ export function DailyChart({ daily }) {
   return (
     <svg
       viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
-      className="h-auto w-full"
+      className="h-auto w-full min-w-[34rem]"
       role="img"
       aria-labelledby="daily-chart-title"
     >

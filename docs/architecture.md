@@ -10,6 +10,8 @@ Decision priority, in order: correctness, security, performance, accessibility, 
 
 ## 1. Product
 
+The interface, URLs, emails and API messages are in Turkish. Code identifiers and the REST API paths stay in English.
+
 ### Users
 
 Individuals, freelancers, creators and small teams who need a form online in minutes and want to read the results without exporting to a spreadsheet first.
@@ -84,7 +86,7 @@ Browser ── HTTPS ──▶│ Server Components ── fetch (server-only, f
 ### State priority
 
 1. Local state — builder document, dialogs, inputs.
-2. URL state — `?q=`, `?from=`, `?to=`, `?cursor=`, `?status=`, `?range=`. Shareable, back-button friendly, readable by Server Components.
+2. URL state — `?ara=`, `?baslangic=`, `?bitis=`, `?sayfa=`, `?durum=`, `?aralik=`. Shareable, back-button friendly, readable by Server Components.
 3. Server state — fetched in Server Components.
 4. Global state — none.
 
@@ -94,20 +96,20 @@ Browser ── HTTPS ──▶│ Server Components ── fetch (server-only, f
 src/app/
 ├── (marketing)/            indexable, static
 │   ├── page.js             /
-│   ├── features/page.js    /features
-│   └── about/page.js       /about
+│   ├── ozellikler/page.js  /ozellikler
+│   └── hakkinda/page.js    /hakkinda
 ├── (auth)/                 noindex, static shells
-│   ├── login/  register/  forgot-password/  reset-password/  verify-email/
+│   ├── giris/  kayit/  sifremi-unuttum/  sifre-sifirla/  eposta-dogrula/
 ├── (app)/                  noindex, dynamic, authenticated shell (sidebar + header)
-│   ├── dashboard/page.js                        /dashboard
-│   ├── forms/page.js                            /forms
-│   ├── forms/create/page.js                     /forms/create
-│   ├── forms/[id]/page.js                       /forms/:id            (builder)
-│   ├── forms/[id]/responses/page.js             /forms/:id/responses
-│   ├── forms/[id]/responses/[responseId]/page.js
-│   ├── forms/[id]/analytics/page.js
-│   ├── forms/[id]/settings/page.js
-│   └── settings/page.js                         /settings
+│   ├── panel/page.js                             /panel
+│   ├── formlar/page.js                           /formlar
+│   ├── formlar/yeni/page.js                      /formlar/yeni
+│   ├── formlar/[id]/page.js                      /formlar/:id          (builder)
+│   ├── formlar/[id]/yanitlar/page.js             /formlar/:id/yanitlar
+│   ├── formlar/[id]/yanitlar/[responseId]/page.js
+│   ├── formlar/[id]/analiz/page.js
+│   ├── formlar/[id]/ayarlar/page.js
+│   └── ayarlar/page.js                           /ayarlar
 ├── f/[slug]/page.js        public form, cached per slug
 ├── revalidate/route.js     internal, secret-protected tag revalidation
 ├── robots.js  sitemap.js  not-found.js  error.js  global-error.js  layout.js
@@ -450,12 +452,12 @@ The in-memory store is correct for one API instance. A shared store (MongoDB or 
 
 Next.js 16 with Cache Components (`cacheComponents: true`). By default nothing is cached; caching is opted into with `"use cache"`.
 
-| Route                      | Rendering                                | Cache                                                            |
-| -------------------------- | ---------------------------------------- | ---------------------------------------------------------------- |
-| `/`, `/features`, `/about` | Static at build                          | Full route, CDN-cacheable                                        |
-| Auth pages                 | Static shell                             | —                                                                |
-| `(app)/*`                  | Dynamic, static shell + streamed content | **Never cached.** Reads cookies, per-user data                   |
-| `/f/[slug]`                | Cached data + static markup              | `"use cache"` + `cacheTag("form:<slug>")` + `cacheLife("hours")` |
+| Route                           | Rendering                                | Cache                                                            |
+| ------------------------------- | ---------------------------------------- | ---------------------------------------------------------------- |
+| `/`, `/ozellikler`, `/hakkinda` | Static at build                          | Full route, CDN-cacheable                                        |
+| Auth pages                      | Static shell                             | —                                                                |
+| `(app)/*`                       | Dynamic, static shell + streamed content | **Never cached.** Reads cookies, per-user data                   |
+| `/f/[slug]`                     | Cached data + static markup              | `"use cache"` + `cacheTag("form:<slug>")` + `cacheLife("hours")` |
 
 - **Private data cannot enter a shared cache.** Cached functions cannot read `cookies()` or `headers()`; Next.js throws if they try. Everything user-specific goes through the non-cached `server-only` API client.
 - **Public form freshness**: when a form is updated, published, paused, archived or deleted, the API calls `POST /revalidate` on the frontend with `REVALIDATE_SECRET` and the tag. `cacheLife("hours")` is a backstop if that call fails. Correctness never depends on the cache: the API rejects submissions to non-published forms regardless of what HTML was served.
@@ -489,7 +491,7 @@ Next.js 16 with Cache Components (`cacheComponents: true`). By default nothing i
 | ----------- | --------- | -------------------------------------------------------------------------------------- |
 | `/`         | ~180 KB   | ~150 KB is the Next.js + React runtime; the page itself ships no islands               |
 | `/f/[slug]` | ~226 KB   | Form island with React Hook Form and Zod Mini; second load served from cache in ~15 ms |
-| `/login`    | ~220 KB   | Same validation stack as the public form                                               |
+| `/giris`    | ~220 KB   | Same validation stack as the public form                                               |
 
 CLS was 0–0.004 on every measured page. Moving client schemas from `zod` to `zod/mini` saved ~70 KB gzip on the public form and login pages, and keeping Radix out of the root error boundary removed it from pages without menus.
 
@@ -497,13 +499,13 @@ CLS was 0–0.004 on every measured page. Moving client schemas from `zod` to `z
 
 - **Metadata API**: root `layout.js` sets `metadataBase`, title template `%s · FormFlow`, default OG/Twitter. Each marketing page exports its own `title`, `description`, `alternates.canonical`, `openGraph` and `twitter`.
 - **Open Graph image**: a static 1200×630 image in `public/assets/og/`.
-- **robots.js**: allow `/`, disallow `/api/`, `/dashboard`, `/forms`, `/settings`, `/revalidate`; points to the sitemap.
-- **sitemap.js**: `/`, `/features`, `/about`.
+- **robots.js**: allow `/`, disallow `/api/`, `/panel`, `/formlar`, `/ayarlar`, `/revalidate`; points to the sitemap.
+- **sitemap.js**: `/`, `/ozellikler`, `/hakkinda`.
 - **noindex**: `(app)` and `(auth)` layouts set `robots: { index: false, follow: false }`; `next.config.js` also sends `X-Robots-Tag: noindex` for app paths.
 - **Public forms**: `noindex` by default. The owner can enable "Allow search engines to index this form" in form settings. Paused forms are always `noindex`. Public forms are not listed in the sitemap in the MVP.
 - **Structured data** only where it matches visible content:
   - `/`: `WebSite` and `SoftwareApplication` (name, category, description — no ratings, no prices).
-  - `/features`, `/about`: `BreadcrumbList`.
+  - `/ozellikler`, `/hakkinda`: `BreadcrumbList`.
   - `FAQPage` only if the features page ships a visible FAQ section.
   - No `Organization` markup: there is no company behind the project to describe.
 - **Semantic HTML**: one `h1` per page, sequential headings, landmarks (`header`, `nav`, `main`, `footer`), real `<form>`, `<label>` and `<button>` elements.
@@ -589,10 +591,8 @@ formflow/
 ├── backend/
 ├── frontend/
 ├── docs/architecture.md
-├── .editorconfig
 ├── .env.example
 ├── .gitignore
-├── .nvmrc
 ├── .prettierrc
 ├── LICENSE
 ├── package.json          npm workspaces: lint / test / build across both apps

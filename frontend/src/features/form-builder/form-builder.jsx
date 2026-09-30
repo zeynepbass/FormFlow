@@ -217,7 +217,7 @@ export function FormBuilder({ form }) {
         </Alert>
       ) : null}
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_13rem]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,1fr)_13rem]">
         <div className="space-y-6">
           <Card className="space-y-4 p-5">
             <div className="space-y-1.5">

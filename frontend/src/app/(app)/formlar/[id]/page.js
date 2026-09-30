@@ -14,7 +14,7 @@ async function Builder({ params }) {
 function BuilderSkeleton() {
   return (
     <div
-      className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_13rem]"
+      className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,1fr)_13rem]"
       role="status"
       aria-busy="true"
       aria-label="Form oluşturucu yükleniyor"
