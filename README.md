@@ -4,7 +4,7 @@ Form oluştur. Yanıtları topla. Verini anla.
 
 FormFlow; serbest çalışanlar, içerik üreticileri ve küçük ekipler için sade bir form oluşturucu. Form hazırlanır, bağlantısı paylaşılır ve yanıtlar tek bir panelden takip edilir.
 
-![Form oluşturucu](docs/images/builder.png)
+![Ana sayfa](docs/images/home.png)
 
 ## Özellikler
 
@@ -18,13 +18,51 @@ FormFlow; serbest çalışanlar, içerik üreticileri ve küçük ekipler için 
 
 ## Ekran Görüntüleri
 
-| Yayınlanan form                                 | Yanıtlar                               |
-| ----------------------------------------------- | -------------------------------------- |
-| ![Yayınlanan form](docs/images/public-form.png) | ![Yanıtlar](docs/images/responses.png) |
+### Tanıtım sayfaları
+
+| Özellikler                              | Hakkında                           |
+| --------------------------------------- | ---------------------------------- |
+| ![Özellikler](docs/images/features.png) | ![Hakkında](docs/images/about.png) |
+
+### Hesap
+
+| Giriş                           | Kayıt                              | Şifremi unuttum                                     |
+| ------------------------------- | ---------------------------------- | --------------------------------------------------- |
+| ![Giriş](docs/images/login.png) | ![Kayıt](docs/images/register.png) | ![Şifremi unuttum](docs/images/forgot-password.png) |
+
+### Panel ve formlar
+
+| Panel                               | Formlar                           |
+| ----------------------------------- | --------------------------------- |
+| ![Panel](docs/images/dashboard.png) | ![Formlar](docs/images/forms.png) |
+
+| Yeni form                              | Hesap ayarları                                      |
+| -------------------------------------- | --------------------------------------------------- |
+| ![Yeni form](docs/images/new-form.png) | ![Hesap ayarları](docs/images/account-settings.png) |
+
+### Form oluşturucu
+
+![Form oluşturucu](docs/images/builder.png)
+
+![Form ayarları](docs/images/form-settings.png)
+
+### Yanıtlar ve analiz
+
+| Yanıt listesi                               | Yanıt detayı                                     |
+| ------------------------------------------- | ------------------------------------------------ |
+| ![Yanıt listesi](docs/images/responses.png) | ![Yanıt detayı](docs/images/response-detail.png) |
 
 ![Analiz](docs/images/analytics.png)
 
-![Mobil görünüm](docs/images/mobile.png)
+### Yayınlanan form
+
+![Yayınlanan form](docs/images/public-form.png)
+
+### Mobil
+
+| Yayınlanan form                       | Panel                                            |
+| ------------------------------------- | ------------------------------------------------ |
+| ![Mobil form](docs/images/mobile.png) | ![Mobil panel](docs/images/mobile-dashboard.png) |
 
 ## Teknolojiler
 
