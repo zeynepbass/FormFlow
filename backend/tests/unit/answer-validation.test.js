@@ -23,9 +23,7 @@ function check(fieldDef, value) {
 describe('validateAnswers', () => {
   it('requires required fields', () => {
     const result = check(field('short_text', { required: true }), '   ');
-    expect(result.errors).toEqual([
-      { path: expect.any(String), message: 'Bu alan zorunludur.' },
-    ]);
+    expect(result.errors).toEqual([{ path: expect.any(String), message: 'Bu alan zorunludur.' }]);
   });
 
   it('skips empty optional fields', () => {

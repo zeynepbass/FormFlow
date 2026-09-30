@@ -62,7 +62,9 @@ async function AnalyticsContent({ params, searchParams }) {
         <h3 id="daily-heading" className="mb-4 font-semibold">
           Günlük gönderimler
         </h3>
-        <DailyChart daily={data.daily} />
+        <div className="-mx-1 overflow-x-auto px-1">
+          <DailyChart daily={data.daily} />
+        </div>
         <DailyTable daily={data.daily} />
       </Card>
 
