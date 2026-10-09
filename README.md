@@ -94,15 +94,4 @@ npm run dev:web
 
 Uygulama http://localhost:3000 adresinde açılır.
 
-## Testler
 
-```bash
-npm run lint
-npm test
-npm run test:e2e -w frontend
-```
-
-## Lisans
-
-
-[MIT](LICENSE)
