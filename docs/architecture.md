@@ -579,7 +579,7 @@ Mobile-first. Breakpoints 375 (base), 768 (`md`), 1024 (`lg`), 1280 (`xl`). App 
 | Unit (web)  | Vitest + Testing Library (jsdom)              | Builder reducer, public form schema builder, field editor keyboard reorder, form components                                                                                                                                                                                  |
 | E2E         | Playwright (Chromium, WebKit mobile viewport) | Register → login → create → add fields → configure → save → publish → open public form → submit → view response → export CSV; keyboard-only builder run; axe checks on key pages                                                                                             |
 
-Async Server Components are covered by E2E rather than unit tests. CI runs lint, unit, integration and build on every push; E2E runs against a MongoDB service container.
+Async Server Components are covered by E2E rather than unit tests.
 
 ---
 
@@ -587,7 +587,6 @@ Async Server Components are covered by E2E rather than unit tests. CI runs lint,
 
 ```text
 formflow/
-├── .github/workflows/ci.yml
 ├── backend/
 ├── frontend/
 ├── docs/architecture.md
